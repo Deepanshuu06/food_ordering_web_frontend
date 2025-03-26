@@ -1,5 +1,6 @@
 import React from "react";
 import { NAVBAR_LOGO_PNG } from "../../constant"; // Assuming this is correct and the constant is properly set
+import { Link } from "react-router";
 
 function Navbar() {
 
@@ -30,7 +31,9 @@ function Navbar() {
     <div className="w-full shadow-md h-20 flex items-center justify-center">
       <div className="w-[95%] flex justify-between items-center">
         <div className="flex items-center ">
-          <img className="w-20" src={NAVBAR_LOGO_PNG} alt="logo" />
+     <Link to={"/"}>
+     <img className="w-20" src={NAVBAR_LOGO_PNG} alt="logo" />  
+     </Link> 
           <div className="flex items-center">
             <p className="font-bold border-b-2 ml-4">Location</p>
             <i className="fi fi-br-angle-small-down mt-3"></i> {/* Ensure correct icon library usage */}

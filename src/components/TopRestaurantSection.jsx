@@ -57,7 +57,7 @@ function TopRestaurantSection({ data }) {
                 key={restaurant.id}
                 style={{ minWidth: `${cardWidth}px` }} 
               >
-                <RestaurantCard data={restaurant} />
+                <RestaurantCard data={restaurant} key={restaurant?.info?.id}/>
               </div>
             );
           })}

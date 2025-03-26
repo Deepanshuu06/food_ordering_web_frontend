@@ -1,0 +1,127 @@
+import React, { useEffect, useState } from "react";
+import { RESTAURANTS_MENU_API } from "../../constant";
+import { Link, useParams } from "react-router";
+import RestaurantsMenuShimmer from "./Shimmers/RestaurantsMenuShimmer";
+import OffersCard from "./cards/OffersCard";
+
+function RestaurantMenu() {
+  const params = useParams();
+  const restaurantId = params?.id;
+  const [offercardTranslateValue, setOffercardTranslateValue] = useState(0);
+  const [data, setData] = useState([]);
+  const [restaurantDetails, setRestaurantDetails] = useState({});
+  const [menuData, setMenuData] = useState([]);
+  const [offers, setOffers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  async function fetchdata() {
+    const data = await fetch(
+      RESTAURANTS_MENU_API + restaurantId.match(/rest(\d+)$/)[1]
+    );
+    const response = await data.json();
+    setData(response);
+    setRestaurantDetails(response?.data?.cards[2]?.card?.card?.info);
+    setOffers(
+      response?.data?.cards[3]?.card?.card?.gridElements?.infoWithStyle?.offers
+    );
+    setMenuData(
+      response?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards
+    );
+    setIsLoading(false);
+  }
+
+  useEffect(() => {
+    fetchdata();
+  }, [params?.id]);
+
+  // console.log(offers);
+
+  function handlePrev() {
+    if (offercardTranslateValue > 0)
+      setOffercardTranslateValue((prev) => prev - 20);
+  }
+  function handleNext() {
+    if (offercardTranslateValue > 120)
+      setOffercardTranslateValue((prev) => prev + 20);
+  }
+
+  return (
+    <div className="w-full mx-auto">
+      <div className="w-[60%] mx-auto">
+        {isLoading ? (
+          <RestaurantsMenuShimmer />
+        ) : (
+          <div>
+            <p className="text-xs font-mono pt-8 text-slate-400">
+              {" "}
+              <Link to={"/"}>
+                <span className="hover:cursor-pointer hover:text-slate-700">
+                  Home
+                </span>
+              </Link>{" "}
+              /{" "}
+              <Link to={`/city/${restaurantDetails?.city}`}>
+                <span className="hover:cursor-pointer hover:text-slate-700">
+                  {restaurantDetails?.city}
+                </span>
+              </Link>{" "}
+              / {restaurantDetails?.name}
+            </p>
+            <h1 className="text-2xl font-bold pt-8 pl-6">
+              {restaurantDetails.name}
+            </h1>
+            <div className="w-full h-56 bg-gradient-to-t from-slate-200 to-white rounded-4xl flex justify-center items-center">
+              <div className="w-[95%] h-[85%] bg-white rounded-4xl border border-gray-300 shadow-lg flex flex-col justify-center p-4 hover:shadow-xl transition-shadow duration-300">
+                <h2 className="text-xl font-semibold mb-2 text-gray-800 ">
+                  <span>
+                    <i className="fi fi-ss-circle-star text-green-600 pr-2 items-center"></i>
+                  </span>
+                  {restaurantDetails?.avgRatingString}{" "}
+                  {`( ${restaurantDetails?.totalRatingsString} )`} -{" "}
+                  {restaurantDetails?.costForTwoMessage}
+                </h2>
+                <h3 className="overflow-hidden whitespace-nowrap text-ellipsis text-orange-600 font-bold mb-3  transition-colors duration-300 cursor-pointer">
+                  {restaurantDetails?.cuisines}
+                </h3>
+                <div className="flex flex-col space-y-2">
+                  <h4 className="text-sm text-gray-700 flex items-center ">
+                    <span>
+                      <i className="fi fi-rs-marker pr-2"></i>
+                    </span>
+                    <span className="font-bold">Outlet</span> -{" "}
+                    <span className="text-sm">
+                      {restaurantDetails?.areaName}
+                    </span>
+                  </h4>
+                  <h4 className="text-sm text-gray-700 flex items-center font-bold">
+                    <span>
+                      <i className="fi fi-rr-clock pr-2"></i>
+                    </span>
+                    {restaurantDetails?.sla?.slaString}
+                  </h4>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div className="flex justify-between items-center pt-8">
+                <h1 className="font-bold text-2xl pl-6 ">Deals for you</h1>
+                <div className="gap-5 flex">
+                  <div>hfsafs</div>
+                  <div>g</div>
+                </div>
+              </div>
+
+              <div className="  overflow-scroll  scroll-auto flex  gap-6 pt-7  ">
+                {offers.map((offer) => (
+                  <OffersCard data={offer} key={offer?.info?.offerIds[0]} />
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default RestaurantMenu;

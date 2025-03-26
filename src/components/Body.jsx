@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { RESTAURANTS_API } from "../../constant";
 import HeroSection from "./HeroSection";
 import TopRestaurantSection from "./TopRestaurantSection";
+import AllRestaurantSection from "./AllRestaurantSection";
 
 function Body() {
   const [data, setData] = useState([]);
@@ -25,6 +26,7 @@ function Body() {
       <div className="w-[80%] mx-auto">
         <HeroSection data={heroSectionData} />
         <TopRestaurantSection data={topRestaurants} />
+        <AllRestaurantSection data={topRestaurants}/>
       </div>
     </div>
   );
