@@ -7,25 +7,23 @@ function HeroSection({ data }) {
   const [translateValue, setTranslateValue] = useState(0);
 
   const maxTranslateValue = (HeroSectionItems.length - 1) * 10; 
-  console.log(maxTranslateValue);
-  console.log(translateValue);
   
   function handlePrev() {
     if (translateValue > 0) {
-      setTranslateValue((prev) => prev - 40); 
+      setTranslateValue((prev) => prev - 42); 
     }
   }
-  
+
   function handleNext() {
     if (translateValue < maxTranslateValue) {
-      setTranslateValue((prev) => prev + 40); 
+      setTranslateValue((prev) => prev + 42); 
     }
   }
 
   return (
     <div>
       <div className="justify-between items-center py-5 flex">
-        <h1 className="text-4xl font-bold">{HeroSectionTitle}</h1>
+        <h1 className="text-2xl font-bold">{HeroSectionTitle}</h1>
         <div className="justify-between flex gap-6 items-center">
           <i
             onClick={handlePrev}
@@ -38,16 +36,16 @@ function HeroSection({ data }) {
           ></i>
         </div>
       </div>
-      <div className="w-full mx-auto border overflow-hidden">
+      <div className="w-full mx-auto  overflow-hidden">
         <div
-          className="flex duration-1000"
+          className="flex duration-500 gap-4"
           style={{ transform: `translateX(-${translateValue}%)` }}
         >
           {HeroSectionItems.map((item) => {
             return (
               <img
                 src={HERO_SECTION_CONST_IMAGE_URL + item?.imageId}
-                className="w-40"
+                className="w-38"
                 alt=""
                 id={item?.id}
                 key={item?.id}
