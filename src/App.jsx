@@ -1,8 +1,13 @@
 import React from 'react'
+import Navbar from './components/Navbar'
+import Body from './components/Body'
 
 function App() {
   return (
-    <div className='text-3xl'>App</div>
+    <div >
+      <Navbar />
+      <Body/> 
+    </div>
   )
 }
 
