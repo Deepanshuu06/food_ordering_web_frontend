@@ -1,0 +1,65 @@
+// OffersModal.jsx
+import React, { useState } from "react";
+
+function OffersModal({ data, onClose }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(data?.info?.couponCode || "");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 backdrop-blur-xs flex items-center justify-center p-4">
+      <div className="relative bg-white rounded-2xl max-w-2xl w-full p-8 shadow-xl">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors cursor-pointer"
+        >
+          ✕
+        </button>
+        
+        <div className="flex flex-col md:flex-row gap-8 mb-6">
+          <div className="w-full md:w-1/3 flex items-center justify-center">
+            <div className="w-32 h-32 bg-gray-100 rounded-xl flex items-center justify-center">
+              <span className="text-gray-400">Image</span>
+            </div>
+          </div>
+          
+          <div className="w-full md:w-2/3">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              {data?.info?.header}
+            </h2>
+            <p className="text-gray-600 mb-4">
+              {data?.info?.primaryDescription}
+            </p>
+            
+            {data?.info?.couponCode && (
+              <div className="flex items-center gap-3 mb-4">
+                <span className="font-mono bg-gray-100 px-3 py-1 rounded">
+                  {data?.info?.couponCode}
+                </span>
+                <button
+                  onClick={handleCopy}
+                  className="text-blue-600 hover:text-blue-700 transition-colors cursor-pointer"
+                >
+                  {copied ? "Copied!" : "Copy"}
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="space-y-3 text-sm text-gray-600">
+          <p>{data?.info?.applicability}</p>
+          <p>
+            Valid until: {data?.info?.validity?.endTimestamp || "N/A"}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default OffersModal;

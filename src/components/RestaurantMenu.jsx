@@ -3,16 +3,19 @@ import { RESTAURANTS_MENU_API } from "../../constant";
 import { Link, useParams } from "react-router";
 import RestaurantsMenuShimmer from "./Shimmers/RestaurantsMenuShimmer";
 import OffersCard from "./cards/OffersCard";
+import OffersModal from "./cards/OfferModal";
 
 function RestaurantMenu() {
   const params = useParams();
   const restaurantId = params?.id;
-  const [offercardTranslateValue, setOffercardTranslateValue] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
   const [restaurantDetails, setRestaurantDetails] = useState({});
   const [menuData, setMenuData] = useState([]);
+  const [actualMenuData, setActualMenuData] = useState([]);
   const [offers, setOffers] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [offercardTranslateValue, setOffercardTranslateValue] = useState(0);
+  const [selectedOffer, setSelectedOffer] = useState(null);
 
   async function fetchdata() {
     const data = await fetch(
@@ -27,6 +30,11 @@ function RestaurantMenu() {
     setMenuData(
       response?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards
     );
+    setActualMenuData(
+      (response?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards).filter(
+        (data) => data?.card?.card?.itemCards
+      )
+    );
     setIsLoading(false);
   }
 
@@ -34,16 +42,17 @@ function RestaurantMenu() {
     fetchdata();
   }, [params?.id]);
 
-  // console.log(offers);
-
   function handlePrev() {
-    if (offercardTranslateValue > 0)
-      setOffercardTranslateValue((prev) => prev - 20);
+    if (offercardTranslateValue > 0) {
+      setOffercardTranslateValue((prev) => prev - 30);
+    }
   }
   function handleNext() {
-    if (offercardTranslateValue > 120)
-      setOffercardTranslateValue((prev) => prev + 20);
+    setOffercardTranslateValue((prev) => prev + 30);
   }
+
+  // console.log(actualMenuData);
+
 
   return (
     <div className="w-full mx-auto">
@@ -52,6 +61,7 @@ function RestaurantMenu() {
           <RestaurantsMenuShimmer />
         ) : (
           <div>
+            {/* Navigation */}
             <p className="text-xs font-mono pt-8 text-slate-400">
               {" "}
               <Link to={"/"}>
@@ -67,6 +77,8 @@ function RestaurantMenu() {
               </Link>{" "}
               / {restaurantDetails?.name}
             </p>
+
+            {/* Restaurant details card */}
             <h1 className="text-2xl font-bold pt-8 pl-6">
               {restaurantDetails.name}
             </h1>
@@ -102,21 +114,76 @@ function RestaurantMenu() {
                 </div>
               </div>
             </div>
+
+            {/* Offers Section */}
             <div>
               <div className="flex justify-between items-center pt-8">
                 <h1 className="font-bold text-2xl pl-6 ">Deals for you</h1>
                 <div className="gap-5 flex">
-                  <div>hfsafs</div>
-                  <div>g</div>
+                  <i
+                    onClick={handlePrev}
+                    className="fi text-3xl fi-br-angle-circle-left cursor-pointer"
+                  ></i>
+                  <i
+                    onClick={handleNext}
+                    className="fi text-3xl fi-br-angle-circle-right cursor-pointer"
+                  ></i>
                 </div>
               </div>
+              <div className="overflow-hidden">
+                <div
+                  className="flex gap-6 pt-7 transition-transform duration-300"
+                  style={{
+                    transform: `translateX(-${offercardTranslateValue}%)`,
+                  }}
+                >
+                  {offers.map((offer) => (
+                    <OffersCard
+                      data={offer}
+                      key={offer?.info?.offerIds[0]}
+                      onClick={() => setSelectedOffer(offer)}
+                    />
+                  ))}
+                </div>
 
-              <div className="  overflow-scroll  scroll-auto flex  gap-6 pt-7  ">
-                {offers.map((offer) => (
-                  <OffersCard data={offer} key={offer?.info?.offerIds[0]} />
-                ))}
+                {selectedOffer && (
+                  <OffersModal
+                    data={selectedOffer}
+                    onClose={() => setSelectedOffer(null)}
+                  />
+                )}
               </div>
             </div>
+
+            {/* Menu Title Text */}
+            <div className="w-full flex items-center pt-10">
+              <h1 className="mx-auto font-mono ">Menu</h1>
+              <i class="fi fi-rs-menu-food text-lg p-2 mr-2"></i>
+            </div>
+
+            {/* Search Section */}
+            <Link to={"/search"}>
+              <div className="w-full  flex  mt-5 bg-gray-200 rounded-xl">
+                <span className="items-center p-2 mx-auto font-bold">
+                  Search for dishes
+                </span>
+                <i class="fi fi-br-search text-lg p-2 mr-2"></i>
+              </div>
+            </Link>
+
+
+            {/* Menu Section */}
+            {
+              actualMenuData.map(({card : {card : {title , itemCards}}})=>{
+
+                return(
+                  <>
+                  <h1>{title}</h1>
+                  </>
+                )
+                
+              })
+            }
           </div>
         )}
       </div>
