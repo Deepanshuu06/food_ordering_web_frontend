@@ -1,7 +1,10 @@
 // OffersCard.jsx
 import React from "react";
+import { OFFER_LOGO_CONST_URL } from "../../../constant";
 
 function OffersCard({ data, onClick }) {
+
+  
   return (
     <div 
       className="relative min-w-[300px] h-30 bg-green-300 rounded-3xl p-6 cursor-pointer 
@@ -10,7 +13,7 @@ function OffersCard({ data, onClick }) {
     >
       <div className="w-1/3 flex items-center justify-center">
         <div className="w-20 h-20 bg-gray-100 rounded-xl flex items-center justify-center">
-          <span className="text-gray-400">Image</span>
+    <img src={OFFER_LOGO_CONST_URL + (data?.info?.offerLogo) } alt={data?.info?.header} />
         </div>
       </div>
       

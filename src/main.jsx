@@ -7,9 +7,10 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import RestaurantMenu from "./components/RestaurantMenu";
+
 import ErrorPage from "./components/ErrorPage";
 import Body from "./components/Body";
+import RestaurantDetailsSection from "./components/RestaurantDetailsSection";
 
 // Create a root and render the application
 
@@ -25,7 +26,7 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/restaurantmenu/:id",
-        element: <RestaurantMenu/>,
+        element: <RestaurantDetailsSection/> ,
       },
     ],
   },

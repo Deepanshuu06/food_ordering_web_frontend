@@ -1,11 +1,13 @@
 // OffersModal.jsx
 import React, { useState } from "react";
+import { OFFER_LOGO_CONST_URL } from "../../../constant";
 
 function OffersModal({ data, onClose }) {
   const [copied, setCopied] = useState(false);
+  const couponCode = data?.info?.couponCode?.match(/USE (\w+)/) || [];
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(data?.info?.couponCode || "");
+    navigator.clipboard.writeText(couponCode[1] || "");
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -19,14 +21,14 @@ function OffersModal({ data, onClose }) {
         >
           ✕
         </button>
-        
+
         <div className="flex flex-col md:flex-row gap-8 mb-6">
           <div className="w-full md:w-1/3 flex items-center justify-center">
-            <div className="w-32 h-32 bg-gray-100 rounded-xl flex items-center justify-center">
-              <span className="text-gray-400">Image</span>
+            <div className="w-32 h-32 bg-white rounded-xl flex items-center justify-center">
+              <img src={OFFER_LOGO_CONST_URL + data?.info?.offerLogo} alt="" />
             </div>
           </div>
-          
+
           <div className="w-full md:w-2/3">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">
               {data?.info?.header}
@@ -34,11 +36,11 @@ function OffersModal({ data, onClose }) {
             <p className="text-gray-600 mb-4">
               {data?.info?.primaryDescription}
             </p>
-            
+
             {data?.info?.couponCode && (
               <div className="flex items-center gap-3 mb-4">
                 <span className="font-mono bg-gray-100 px-3 py-1 rounded">
-                  {data?.info?.couponCode}
+                  {couponCode[1]}
                 </span>
                 <button
                   onClick={handleCopy}
@@ -53,9 +55,7 @@ function OffersModal({ data, onClose }) {
 
         <div className="space-y-3 text-sm text-gray-600">
           <p>{data?.info?.applicability}</p>
-          <p>
-            Valid until: {data?.info?.validity?.endTimestamp || "N/A"}
-          </p>
+          <p>Valid until: {data?.info?.validity?.endTimestamp || "N/A"}</p>
         </div>
       </div>
     </div>

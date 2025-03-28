@@ -4,8 +4,9 @@ import { Link, useParams } from "react-router";
 import RestaurantsMenuShimmer from "./Shimmers/RestaurantsMenuShimmer";
 import OffersCard from "./cards/OffersCard";
 import OffersModal from "./cards/OfferModal";
+import MenuSection from "./MenuSection";
 
-function RestaurantMenu() {
+function RestaurantDetailsSection() {
   const params = useParams();
   const restaurantId = params?.id;
   const [isLoading, setIsLoading] = useState(true);
@@ -18,6 +19,7 @@ function RestaurantMenu() {
   const [selectedOffer, setSelectedOffer] = useState(null);
 
   async function fetchdata() {
+    
     const data = await fetch(
       RESTAURANTS_MENU_API + restaurantId.match(/rest(\d+)$/)[1]
     );
@@ -31,8 +33,8 @@ function RestaurantMenu() {
       response?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards
     );
     setActualMenuData(
-      (response?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards).filter(
-        (data) => data?.card?.card?.itemCards
+      (response?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards ?? []).filter(
+        (data) => data?.card?.card?.itemCards || data?.card?.card?.categories
       )
     );
     setIsLoading(false);
@@ -51,12 +53,9 @@ function RestaurantMenu() {
     setOffercardTranslateValue((prev) => prev + 30);
   }
 
-  // console.log(actualMenuData);
-
-
   return (
     <div className="w-full mx-auto">
-      <div className="w-[60%] mx-auto">
+      <div className="w-[95%] lg:w-[60%] md:[75%] mx-auto">
         {isLoading ? (
           <RestaurantsMenuShimmer />
         ) : (
@@ -171,19 +170,12 @@ function RestaurantMenu() {
               </div>
             </Link>
 
-
             {/* Menu Section */}
-            {
-              actualMenuData.map(({card : {card : {title , itemCards}}})=>{
-
-                return(
-                  <>
-                  <h1>{title}</h1>
-                  </>
-                )
-                
-              })
-            }
+            <div className="pt-5">
+              {actualMenuData.map(({ card: { card } }) => (
+                <MenuSection card={card}/>
+              ))}
+            </div>
           </div>
         )}
       </div>
@@ -191,4 +183,4 @@ function RestaurantMenu() {
   );
 }
 
-export default RestaurantMenu;
+export default RestaurantDetailsSection;
