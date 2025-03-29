@@ -12,14 +12,14 @@ function RestaurantDetailsSection() {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
   const [restaurantDetails, setRestaurantDetails] = useState({});
-  const [menuData, setMenuData] = useState([]);
+  const { topPicksItems, setTopPicksItem } = useState([]);
+  // const [menuData, setMenuData] = useState([]);
   const [actualMenuData, setActualMenuData] = useState([]);
   const [offers, setOffers] = useState([]);
   const [offercardTranslateValue, setOffercardTranslateValue] = useState(0);
   const [selectedOffer, setSelectedOffer] = useState(null);
 
   async function fetchdata() {
-    
     const data = await fetch(
       RESTAURANTS_MENU_API + restaurantId.match(/rest(\d+)$/)[1]
     );
@@ -29,14 +29,24 @@ function RestaurantDetailsSection() {
     setOffers(
       response?.data?.cards[3]?.card?.card?.gridElements?.infoWithStyle?.offers
     );
-    setMenuData(
-      response?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards
-    );
+    // setMenuData(
+    //   response?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards
+    // );
+    // setTopPicksItem(
+    //   (
+    //     data?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards ?? []
+    //   ).filter((item) => item?.card?.card?.title === "Top Picks")
+    // );
+
     setActualMenuData(
-      (response?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards ?? []).filter(
+      (
+        response?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards ??
+        []
+      ).filter(
         (data) => data?.card?.card?.itemCards || data?.card?.card?.categories
       )
     );
+
     setIsLoading(false);
   }
 
@@ -52,6 +62,7 @@ function RestaurantDetailsSection() {
   function handleNext() {
     setOffercardTranslateValue((prev) => prev + 30);
   }
+
 
   return (
     <div className="w-full mx-auto">
@@ -173,7 +184,7 @@ function RestaurantDetailsSection() {
             {/* Menu Section */}
             <div className="pt-5">
               {actualMenuData.map(({ card: { card } }) => (
-                <MenuSection card={card}/>
+                <MenuSection card={card} />
               ))}
             </div>
           </div>

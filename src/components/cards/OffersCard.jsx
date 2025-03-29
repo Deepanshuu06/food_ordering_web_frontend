@@ -7,7 +7,7 @@ function OffersCard({ data, onClick }) {
   
   return (
     <div 
-      className="relative min-w-[300px] h-30 bg-green-300 rounded-3xl p-6 cursor-pointer 
+      className="relative min-w-[300px] h-30 bg-slate-100 rounded-3xl p-6 cursor-pointer 
                  transition-all duration-300 hover:scale-105 hover:shadow-xl flex gap-4"
       onClick={onClick}
     >

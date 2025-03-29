@@ -5,8 +5,6 @@ function AllRestaurantSection({ data, title }) {
   const allRestaurantList =
     data?.gridElements?.infoWithStyle?.restaurants || [];
 
-  console.log(title);
-
   return (
     <div className="mt-8">
       <h1 className="text-3xl font-bold">{title?.title}</h1>
