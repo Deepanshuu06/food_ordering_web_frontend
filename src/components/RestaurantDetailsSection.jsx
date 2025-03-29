@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { RESTAURANTS_MENU_API } from "../../constant";
 import { Link, useParams } from "react-router";
 import RestaurantsMenuShimmer from "./Shimmers/RestaurantsMenuShimmer";
 import OffersCard from "./cards/OffersCard";
 import OffersModal from "./cards/OfferModal";
 import MenuSection from "./MenuSection";
+import { Coordinates } from "../Context/ContextApis";
+import { useNavigate } from 'react-router-dom';
 
 function RestaurantDetailsSection() {
+
+  const {coordinates : {lat , lng}} = useContext(Coordinates)
+  const navigate = useNavigate();
   const params = useParams();
   const restaurantId = params?.id;
   const [isLoading, setIsLoading] = useState(true);
@@ -63,6 +68,18 @@ function RestaurantDetailsSection() {
     setOffercardTranslateValue((prev) => prev + 30);
   }
 
+  const prevCoords = useRef({ lat, lng });
+  console.log(prevCoords);
+  
+  
+
+  // Redirection when lat/lng change
+  useEffect(() => {
+    if (lat !== prevCoords.current.lat || lng !== prevCoords.current.lng) {
+      prevCoords.current = { lat, lng };
+      navigate('/'); 
+    }
+  }, [lat, lng, navigate]);
 
   return (
     <div className="w-full mx-auto">
