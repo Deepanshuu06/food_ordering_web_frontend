@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { LATandLONG_API, LOCATION_API, NAVBAR_LOGO_PNG } from "../../constant";
 import { Link } from "react-router-dom";
-import { Coordinates, Visibility } from "../Context/ContextApis";
+import { Visibility } from "../Context/ContextApis";
+import { useDispatch } from "react-redux";
+import { setCoordinates } from "./utils/slices/locationSlice";
 
 function Navbar() {
+  const dispatch = useDispatch() 
   const { isLocationSectionVisible, setIsLocationSectionVisible } =
     useContext(Visibility);
-
-  const { setCoordinates } = useContext(Coordinates);
 
   const [locationName, setLocationName] = useState("");
   const [locationSearchText, setLocationSearchText] = useState("");
@@ -15,28 +16,49 @@ function Navbar() {
   const [error, setError] = useState(null);
 
   const navItems = [
-    { name: "Corporate", icon: <i className="fi fi-br-shopping-bag"></i> },
-    { name: "Search", icon: <i className="fi fi-br-search"></i> },
-    { name: "Offers", icon: <i className="fi fi-rr-badge-percent"></i> },
-    { name: "Sign In", icon: <i className="fi fi-rr-user"></i> },
-    { name: "Cart", icon: <i className="fi fi-rr-basket-shopping-simple"></i> },
+    {
+      name: "Corporate",
+      icon: <i className="fi fi-br-shopping-bag"></i>,
+      link: "/corporate",
+    },
+    {
+      name: "Search",
+      icon: <i className="fi fi-br-search"></i>,
+      link: "/search",
+    },
+    {
+      name: "Offers",
+      icon: <i className="fi fi-rr-badge-percent"></i>,
+      link: "/offers",
+    },
+    {
+      name: "Sign In",
+      icon: <i className="fi fi-rr-user"></i>,
+      link: "/signin",
+    },
+    {
+      name: "Cart",
+      icon: <i className="fi fi-rr-basket-shopping-simple"></i>,
+      link: "/cart",
+    },
   ];
+
+
 
   const getUserLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setCoordinates({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          });
+          const { latitude, longitude } = position.coords;
+          dispatch(setCoordinates({ lat: latitude, lng: longitude }))
+
+          setIsLocationSectionVisible(false);
         },
         (err) => {
           setError("Unable to retrieve your location.");
           console.error(err);
         }
       );
-      setIsLocationSectionVisible(false);
     } else {
       setError("Geolocation is not supported by your browser.");
     }
@@ -56,10 +78,12 @@ function Navbar() {
     const res = await fetch(LATandLONG_API + item?.place_id);
     const data = await res.json();
 
-    setCoordinates({
+   
+
+    dispatch(setCoordinates({
       lat: data?.data[0]?.geometry?.location?.lat,
       lng: data?.data[0]?.geometry?.location?.lng,
-    });
+    }))
 
     setLocationName(item?.structured_formatting?.main_text);
     setIsLocationSectionVisible(false);
@@ -68,6 +92,8 @@ function Navbar() {
   useEffect(() => {
     fetchLocation();
   }, [locationSearchText]);
+
+  console.log();
 
   return (
     <div>
@@ -88,7 +114,7 @@ function Navbar() {
             <div className="flex flex-col gap-2 ">
               <button
                 onClick={handleLocationVisibility}
-                className="mt-4 bg-red-500 w-[40px] text-white px-4 py-2 rounded hover:bg-red-600 transition"
+                className="mt-4 bg-red-500 w-[40px] text-white px-4 py-2 rounded hover:bg-red-600 transition cursor-pointer"
               >
                 X
               </button>
@@ -103,8 +129,10 @@ function Navbar() {
               />
               {locationSearchText.length <= 2 && (
                 <div
-                  className="w-[90%] h-20 shadow-2xl p-6 border border-slate-300 rounded-xl bg-white flex gap-6 items-center"
-                  onClick={()=>{getUserLocation();  setLocationName("Your location")}}
+                  className="w-[90%] h-20 shadow-2xl p-6 border border-slate-300 rounded-xl bg-white flex gap-6 items-center cursor-pointer"
+                  onClick={() => {
+                    getUserLocation();
+                  }}
                 >
                   <i class="fi fi-rr-target text-2xl"></i>
                   <div>
@@ -112,6 +140,7 @@ function Navbar() {
                       Get Your Current Location
                     </h1>
                     <p className="text-xs">Using GPS</p>
+                    <p className="text-xs">{error}</p>
                   </div>
                 </div>
               )}
@@ -120,7 +149,7 @@ function Navbar() {
                   // console.log(item);
                   return (
                     <div
-                      className="w-[90%] shadow-2xl p-6 border border-slate-300 rounded-xl bg-white flex gap-6 items-center "
+                      className="w-[90%] shadow-2xl p-6 border border-slate-300 rounded-xl bg-white flex gap-6 items-center cursor-pointer "
                       onClick={() => fetchlatandlang(item)}
                     >
                       <i class="fi fi-rs-marker text-2xl"></i>
@@ -161,13 +190,15 @@ function Navbar() {
           <div className="flex items-center justify-between gap-10">
             <div className="lg:flex items-center gap-10 hidden">
               {navItems.map((item, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  {item.icon}
-                  <a href="#" className="text-md">
-                    {item.name}
-                  </a>
-                </div>
-              ))}
+                <Link to={item?.link}>
+                  <div key={index} className="flex items-center gap-2">
+                    {item.icon}
+                    <a href="#" className="text-md">
+                      {item.name}
+                    </a>
+                  </div>
+                </Link>
+              ))} 
             </div>
           </div>
         </div>

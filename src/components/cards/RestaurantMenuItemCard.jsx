@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { MENU_ITEM_CONST_IMAGE_URL } from "../../../constant";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../utils/slices/cartSlice";
 
 function RestaurantMenuItemCard({ card }) {
   const [isMenuItemCardOpen, setIsMenuItemCardOpen] = useState(true);
@@ -11,9 +13,18 @@ function RestaurantMenuItemCard({ card }) {
   function toggleDiscription() {
     setIsDiscriptionExpanded(!isDiscriptionExpanded);
   }
+  const dispatch = useDispatch()
+
+function handleAddtoCart(info){
+    dispatch(addToCart(info))
+  }
+
+
+const cart = useSelector((state)=>state.cart)
+    console.log(cart.item);
+
 
   if (card?.itemCards) {
-
 
     return (
       <div className="border-b-5 border-slate-200 mt-6">
@@ -111,8 +122,8 @@ function RestaurantMenuItemCard({ card }) {
                       <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-gray-100/90 to-transparent flex items-end justify-center pb-1">
                         <button
                           className="bg-white border border-gray-300 text-green-600 font-semibold px-3 py-1 rounded-md hover:bg-gray-100 transition-colors text-sm shadow-sm w-[80%] cursor-pointer"
-                          onClick={(e) => {
-                            e.stopPropagation();
+                          onClick={() => {
+                            handleAddtoCart(info)
                           }}
                         >
                           ADD

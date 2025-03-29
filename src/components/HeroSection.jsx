@@ -22,17 +22,17 @@ function HeroSection({ data }) {
 
   return (
     <div>
-      <div className="justify-between items-center py-5 flex">
-        <h1 className="text-2xl font-bold">{HeroSectionTitle}</h1>
+      <div className="justify-between items-center py-5 flex ">
+        <h1 className="text-lg lg:text-2xl md:text-xl font-bold">{HeroSectionTitle}</h1>
         <div className="justify-between flex gap-6 items-center">
           <i
             onClick={handlePrev}
-            className={`fi text-3xl fi-br-angle-circle-left cursor-pointer ${translateValue === 0 ? "text-gray-400" : "text-black"}`} // Disabled state for the previous button
+            className={`fi text-xl lg:text-3xl md:text-2xl fi-br-angle-circle-left cursor-pointer ${translateValue === 0 ? "text-gray-400" : "text-black"}`} // Disabled state for the previous button
           ></i>
 
           <i
             onClick={handleNext}
-            className={`fi text-3xl fi-br-angle-circle-right cursor-pointer ${translateValue === maxTranslateValue ? "text-gray-400" : "text-black"}`} 
+            className={`fi text-xl lg:text-3xl md:text-2xl fi-br-angle-circle-right cursor-pointer ${translateValue === maxTranslateValue ? "text-gray-400" : "text-black"}`} 
           ></i>
         </div>
       </div>

@@ -5,19 +5,19 @@ import RestaurantsMenuShimmer from "./Shimmers/RestaurantsMenuShimmer";
 import OffersCard from "./cards/OffersCard";
 import OffersModal from "./cards/OfferModal";
 import MenuSection from "./MenuSection";
-import { Coordinates } from "../Context/ContextApis";
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from "react-redux";
 
 function RestaurantDetailsSection() {
 
-  const {coordinates : {lat , lng}} = useContext(Coordinates)
+  const {lng , lat} = useSelector((state)=>state.location)
   const navigate = useNavigate();
   const params = useParams();
   const restaurantId = params?.id;
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
   const [restaurantDetails, setRestaurantDetails] = useState({});
-  const { topPicksItems, setTopPicksItem } = useState([]);
+  // const { topPicksItems, setTopPicksItem } = useState([]);
   // const [menuData, setMenuData] = useState([]);
   const [actualMenuData, setActualMenuData] = useState([]);
   const [offers, setOffers] = useState([]);
@@ -69,7 +69,7 @@ function RestaurantDetailsSection() {
   }
 
   const prevCoords = useRef({ lat, lng });
-  console.log(prevCoords);
+
   
   
 

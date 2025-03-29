@@ -1,7 +1,7 @@
 const RestaurantShimmer = () => {
     return (
-      <div className="p-4 mt-20">
-        <div className="h-52     bg-gray-800  flex items-center justify-center text-white text-lg font-semibold">
+      <div className="p-4">
+        <div className="h-32 bg-gray-800 flex items-center justify-center text-white text-lg font-semibold">
           Looking for great food near you ...
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
@@ -18,3 +18,4 @@ const RestaurantShimmer = () => {
   };
   
   export default RestaurantShimmer;
+  
