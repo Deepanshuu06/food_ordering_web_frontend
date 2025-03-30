@@ -19,7 +19,7 @@ function App() {
           <Navbar />
           <div
             className={
-              "pt-20" +
+              "pt-16" +
               (isLocationSectionVisible ? " overflow-hidden max-h-screen" : "")
             }
           >

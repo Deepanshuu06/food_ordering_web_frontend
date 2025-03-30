@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MENU_ITEM_CONST_IMAGE_URL } from "../../../constant";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../utils/slices/cartSlice";
+import { addToCart, updateQuantity } from "../utils/slices/cartSlice";
 
 function RestaurantMenuItemCard({ card }) {
   const [isMenuItemCardOpen, setIsMenuItemCardOpen] = useState(true);
@@ -13,19 +13,24 @@ function RestaurantMenuItemCard({ card }) {
   function toggleDiscription() {
     setIsDiscriptionExpanded(!isDiscriptionExpanded);
   }
-  const dispatch = useDispatch()
 
-function handleAddtoCart(info){
-    dispatch(addToCart(info))
-  }
+  const dispatch = useDispatch();
 
+  const { items } = useSelector((state) => state.cart);
 
-const cart = useSelector((state)=>state.cart)
-    console.log(cart.item);
+  const handleAddToCart = (info) => {
+    const foundItem = items.find((item) => item.id === info?.id);
 
+    if (foundItem) {
+      dispatch(
+        updateQuantity({ id: info.id, quantity: foundItem.itemQuantity + 1 })
+      );
+    } else {
+      dispatch(addToCart({ ...info, itemQuantity: 1 }));
+    }
+  };
 
   if (card?.itemCards) {
-
     return (
       <div className="border-b-5 border-slate-200 mt-6">
         <div
@@ -123,7 +128,7 @@ const cart = useSelector((state)=>state.cart)
                         <button
                           className="bg-white border border-gray-300 text-green-600 font-semibold px-3 py-1 rounded-md hover:bg-gray-100 transition-colors text-sm shadow-sm w-[80%] cursor-pointer"
                           onClick={() => {
-                            handleAddtoCart(info)
+                            handleAddToCart(info);
                           }}
                         >
                           ADD
@@ -145,7 +150,7 @@ const cart = useSelector((state)=>state.cart)
           <div>
             {card?.categories?.map((item) => (
               <RestaurantMenuItemCard
-                key={item?.id} // Added key prop for list stability
+                key={item?.id} 
                 card={item}
               />
             ))}

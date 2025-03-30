@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { LATandLONG_API, LOCATION_API, NAVBAR_LOGO_PNG } from "../../constant";
 import { Link } from "react-router-dom";
 import { Visibility } from "../Context/ContextApis";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setCoordinates } from "./utils/slices/locationSlice";
 
 function Navbar() {
@@ -14,6 +14,11 @@ function Navbar() {
   const [locationSearchText, setLocationSearchText] = useState("");
   const [locationSearchResult, setLocationSearchResult] = useState([]);
   const [error, setError] = useState(null);
+
+  const {items} = useSelector( (state)=>state.cart)
+
+  
+
 
   const navItems = [
     {
@@ -93,7 +98,7 @@ function Navbar() {
     fetchLocation();
   }, [locationSearchText]);
 
-  console.log();
+
 
   return (
     <div>
@@ -146,7 +151,7 @@ function Navbar() {
               )}
               <div className="flex overflow-scroll flex-col ">
                 {locationSearchResult?.map((item) => {
-                  // console.log(item);
+
                   return (
                     <div
                       className="w-[90%] shadow-2xl p-6 border border-slate-300 rounded-xl bg-white flex gap-6 items-center cursor-pointer "
@@ -199,6 +204,7 @@ function Navbar() {
                   </div>
                 </Link>
               ))} 
+              <p>{items.length}</p>
             </div>
           </div>
         </div>

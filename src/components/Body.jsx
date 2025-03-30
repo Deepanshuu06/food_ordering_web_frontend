@@ -17,7 +17,7 @@ function Body() {
   const [isUnserviceableLocation, setIsUnserviceableLocation] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const {lng , lat} = useSelector((state)=>state.location)
-  console.log(lat);
+
 
   async function fetchData() {
     const response = await fetch(
@@ -40,7 +40,7 @@ function Body() {
     fetchData();
   }, [lat, lng]);
 
-  // console.log(isUnserviceableLocation);
+
  
   
 
