@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { LATandLONG_API, LOCATION_API, NAVBAR_LOGO_PNG } from "../../constant";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Visibility } from "../Context/ContextApis";
 import { useDispatch, useSelector } from "react-redux";
 import { setCoordinates } from "./utils/slices/locationSlice";
@@ -48,6 +48,7 @@ function Navbar() {
     },
   ];
 
+  const navigate = useNavigate()
 
 
   const getUserLocation = () => {
@@ -56,8 +57,10 @@ function Navbar() {
         (position) => {
           const { latitude, longitude } = position.coords;
           dispatch(setCoordinates({ lat: latitude, lng: longitude }))
-
           setIsLocationSectionVisible(false);
+          navigate('/');
+
+          
         },
         (err) => {
           setError("Unable to retrieve your location.");

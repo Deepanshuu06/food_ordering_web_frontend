@@ -13,6 +13,8 @@ import Body from "./components/Body";
 import RestaurantDetailsSection from "./components/RestaurantDetailsSection";
 import CartPage from "./components/CartPage";
 import SearchPage from "./components/SearchPage";
+import CorporatePage from "./components/CorporatePage";
+import OffersPage from "./components/OffersPage";
 
 // Create a root and render the application
 
@@ -37,6 +39,15 @@ const appRouter = createBrowserRouter([
       {
         path:"/search",
         element:<SearchPage/>
+      },
+      {
+        path:"/corporate",
+        element:<CorporatePage/>
+      }
+      ,
+      {
+        path:"/offers",
+        element:<OffersPage/>
       }
     ],
   },
