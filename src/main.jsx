@@ -12,6 +12,7 @@ import ErrorPage from "./components/ErrorPage";
 import Body from "./components/Body";
 import RestaurantDetailsSection from "./components/RestaurantDetailsSection";
 import CartPage from "./components/CartPage";
+import SearchPage from "./components/SearchPage";
 
 // Create a root and render the application
 
@@ -32,6 +33,10 @@ const appRouter = createBrowserRouter([
       {
         path:"/cart",
         element : <CartPage/>
+      },
+      {
+        path:"/search",
+        element:<SearchPage/>
       }
     ],
   },

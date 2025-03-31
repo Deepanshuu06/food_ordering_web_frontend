@@ -1,5 +1,11 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import {
+  decreaseQuantity,
+  increaseQuantity,
+  removeFromCart,
+} from "./utils/slices/cartSlice";
+import { MENU_ITEM_CONST_IMAGE_URL } from "../../constant";
 
 function CartPage() {
   const cart = useSelector((state) => state.cart);
@@ -10,19 +16,34 @@ function CartPage() {
 
   const itemTotal =
     cart?.items?.reduce(
-      (acc, item) => acc + item.price * item.itemQuantity,
+      (acc, item) =>
+        acc + (item?.price || item?.defaultPrice) * item.itemQuantity,
       0
     ) || 0;
   const deliveryFee = itemTotal * 0.25;
   const gstCharges = itemTotal * 0.18;
   const totalAmount = itemTotal + deliveryFee + gstCharges;
 
-  const handleQuantityChange = (index, type) => {
-    const newCart = [...cart.item];
-    if (type === "increase") newCart[index].quantity += 1;
-    if (type === "decrease" && newCart[index].quantity > 1)
-      newCart[index].quantity -= 1;
-    dispatch({ type: "UPDATE_CART", payload: newCart });
+  //   const handleQuantityChange = (index, type) => {
+  //     const newCart = [...cart.item];
+  //     if (type === "increase") newCart[index].quantity += 1;
+  //     if (type === "decrease" && newCart[index].quantity > 1)
+  //       newCart[index].quantity -= 1;
+  //     dispatch({ type: "UPDATE_CART", payload: newCart });
+  //   };
+
+  const handleUpdateQuantity = (data, type) => {
+    if (type === "increase" && data.itemQuantity < 15) {
+      dispatch(increaseQuantity({ id: data.id }));
+    }
+
+    if (type === "decrease") {
+      if (data.itemQuantity > 1) {
+        dispatch(decreaseQuantity({ id: data.id }));
+      } else {
+        dispatch(removeFromCart({ id: data.id }));
+      }
+    }
   };
 
   return (
@@ -64,7 +85,11 @@ function CartPage() {
                   <h1 className="font-bold py-2">
                     Sign up or log in to your account
                   </h1>
-                  <form action="signUp" className="flex flex-col gap-2">
+                  <form
+                    action="signUp"
+                    className="flex flex-col gap-2"
+                    method="post"
+                  >
                     <input
                       className="border-1 border-slate-300 p-5 w-[80%] outline-none  "
                       type="text"
@@ -112,7 +137,11 @@ function CartPage() {
                   <h1 className="font-bold py-2">
                     Enter login details or create an account
                   </h1>
-                  <form action="signIn" className="flex flex-col gap-2">
+                  <form
+                    action="signIn"
+                    className="flex flex-col gap-2"
+                    method="post"
+                  >
                     <input
                       className="border-1 border-slate-300 p-5 w-[80%] outline-none "
                       type="text"
@@ -162,49 +191,59 @@ function CartPage() {
           </div>
 
           {cart?.items?.length > 0 ? (
-            cart.items.map((item, index) => (
-              <div
-                key={item.id || index}
-                className="flex items-center justify-between bg-white p-4 rounded-md shadow-sm mb-4 transition-transform transform hover:scale-105"
-              >
-                <div className="flex items-center gap-4">
-                  <span
-                    className={`w-4 h-4 rounded-full ${
-                      item?.isVeg ? "bg-green-500" : "bg-red-500"
-                    }`}
-                  ></span>
+            cart.items.map((item, index) =>
+              item.itemQuantity > 0 ? (
+                <div
+                  key={item.id || index}
+                  className="flex items-center justify-between bg-white p-4 rounded-md shadow-sm mb-4 transition-transform transform hover:scale-105 gap-2"
+                >
+                  <div className="flex items-center gap-2">
+                    <div>
+                      <img
+                        className="w-20 h-15 object-cover rounded-lg"
+                        src={`${MENU_ITEM_CONST_IMAGE_URL}${item.imageId}`}
+                        alt={item?.name || "Menu Item"}
+                      />
+                      <h1>{console.log(item)
+                      }</h1>
+                    </div>
+                    <div className="w-[90%]">
+                      <h2 className="text-[10px]">{item?.name}</h2>
+                      {(item?.addons) ? <p className="text-sm text-gray-500">
+                       customize
+                       </p> : "" }
+                      
+                    </div>
+                  </div>
+                  <div className="flex items-center  border-slate-600 border justify-around">
+                    <button
+                      onClick={() => handleUpdateQuantity(item, "decrease")}
+                      className="rounded-md hover:bg-gray-100 transition cursor-pointer px-3"
+                    >
+                      -
+                    </button>
+                    <span>{item.itemQuantity}</span>
+                    <button
+                      onClick={() => handleUpdateQuantity(item, "increase")}
+                      className="hover:bg-gray-100 transition cursor-pointer px-3"
+                    >
+                      +
+                    </button>
+                  </div>
                   <div>
-                    <h2 className=" text-xs">{item?.name}</h2>
-                    <p className="text-sm text-gray-500">
-                      {item?.customization}
-                    </p>
+                    <h2 className="font-bold">
+                      {new Intl.NumberFormat("en-US", {
+                        style: "currency",
+                        currency: "INR",
+                      }).format(
+                        ((item?.price || item?.defaultPrice || 0) / 100) *
+                          (item?.itemQuantity || 0)
+                      )}
+                    </h2>
                   </div>
                 </div>
-                <div className="flex items-center w-[20%]  border-slate-600 border justify-around">
-                  <button
-                    onClick={() => handleQuantityChange(index, "decrease")}
-                    className=" rounded-md hover:bg-gray-100 transition cursor-pointer"
-                  >
-                    -
-                  </button>
-                  <span>{item.itemQuantity}</span>
-                  <button
-                    onClick={() => handleQuantityChange(index, "increase")}
-                    className="  hover:bg-gray-100 transition cursor-pointer"
-                  >
-                    +
-                  </button>
-                </div>
-                <div>
-                  <h2 className="font-bold">
-                    {new Intl.NumberFormat("en-US", {
-                      style: "currency",
-                      currency: "INR",
-                    }).format(item?.price / 100)}
-                  </h2>
-                </div>
-              </div>
-            ))
+              ) : null
+            )
           ) : (
             <p className="text-center text-gray-500">Your cart is empty.</p>
           )}

@@ -15,7 +15,7 @@ function Navbar() {
   const [locationSearchResult, setLocationSearchResult] = useState([]);
   const [error, setError] = useState(null);
 
-  const {items} = useSelector( (state)=>state.cart)
+  const {items , totalprice} = useSelector( (state)=>state.cart)
 
   
 
@@ -205,6 +205,7 @@ function Navbar() {
                 </Link>
               ))} 
               <p>{items.length}</p>
+              <p>{Math.ceil(totalprice /100)}</p>
             </div>
           </div>
         </div>

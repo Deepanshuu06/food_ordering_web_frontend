@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { MENU_ITEM_CONST_IMAGE_URL } from "../../../constant";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, updateQuantity } from "../utils/slices/cartSlice";
+import {
+  addToCart,
+  decreaseQuantity,
+  increaseQuantity,
+  removeFromCart,
+} from "../utils/slices/cartSlice";
+import { ToastContainer, toast } from "react-toastify";
 
 function RestaurantMenuItemCard({ card }) {
   const [isMenuItemCardOpen, setIsMenuItemCardOpen] = useState(true);
   const [isDiscriptionExpanded, setIsDiscriptionExpanded] = useState(false);
+  const [isRestaurantMenuItemModel ,setIsRestaurantMenuItemModel ] = useState(false)
 
   function handleisMenuItemCardOpen() {
     setIsMenuItemCardOpen(!isMenuItemCardOpen);
@@ -17,18 +24,42 @@ function RestaurantMenuItemCard({ card }) {
   const dispatch = useDispatch();
 
   const { items } = useSelector((state) => state.cart);
+  const [existingItem, setExistingItem] = useState([]);
+  // const existingItem =
+  const quantity = existingItem ? existingItem.itemQuantity : 0;
+
+ 
+  
 
   const handleAddToCart = (info) => {
     const foundItem = items.find((item) => item.id === info?.id);
 
     if (foundItem) {
       dispatch(
-        updateQuantity({ id: info.id, quantity: foundItem.itemQuantity + 1 })
+        increaseQuantity({ id: info.id, quantity: foundItem.itemQuantity + 1 })
       );
+      notify("Quantity Updated - " + (foundItem.itemQuantity + 1));
     } else {
       dispatch(addToCart({ ...info, itemQuantity: 1 }));
+      notify("added to cart");
     }
   };
+
+  const handleUpdateQuantity = (data, type) => {
+    if (type === "increase" && data.itemQuantity < 15) {
+      dispatch(increaseQuantity({ id: data.id }));
+    }
+
+    if (type === "decrease") {
+      if (data.itemQuantity > 1) {
+        dispatch(decreaseQuantity({ id: data.id }));
+      } else {
+        dispatch(removeFromCart({ id: data.id }));
+      }
+    }
+  };
+
+  const notify = (text) => toast(text);
 
   if (card?.itemCards) {
     return (
@@ -60,6 +91,7 @@ function RestaurantMenuItemCard({ card }) {
                 className="flex flex-row justify-between py-6 border-t border-gray-200 duration-1000"
               >
                 {/* Text Content */}
+
                 <div className="md:pr-8 flex-1">
                   <div className="mb-2">
                     {info?.itemAttribute?.vegClassifier === "VEG" ? (
@@ -125,14 +157,27 @@ function RestaurantMenuItemCard({ card }) {
                       />
                       {/* Add to Cart Button */}
                       <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-gray-100/90 to-transparent flex items-end justify-center pb-1">
+                       
                         <button
-                          className="bg-white border border-gray-300 text-green-600 font-semibold px-3 py-1 rounded-md hover:bg-gray-100 transition-colors text-sm shadow-sm w-[80%] cursor-pointer"
-                          onClick={() => {
-                            handleAddToCart(info);
-                          }}
-                        >
-                          ADD
+                          className={`bg-white border border-gray-300 text-green-600 font-semibold px-3 py-1 rounded-md hover:bg-gray-100 transition-colors text-sm shadow-sm cursor-pointer `}
+                          onClick={() =>{
+                             handleAddToCart(info) 
+
+                          } } >
+                          
+                            <h1>Add to Cart</h1>
+                      
                         </button>
+
+                        <ToastContainer
+                          position="top-center"
+                          autoClose={100}
+                          hideProgressBar={true}
+                          newestOnTop={false}
+                          closeOnClick
+                          rtl={false}
+                          theme="colored" // You can change this to "light", "dark", or "colored"
+                        />
                       </div>
                     </div>
                   </div>
@@ -149,10 +194,7 @@ function RestaurantMenuItemCard({ card }) {
           <h2 className="text-xl  text-gray-800 mb-2">{card?.title}</h2>
           <div>
             {card?.categories?.map((item) => (
-              <RestaurantMenuItemCard
-                key={item?.id} 
-                card={item}
-              />
+              <RestaurantMenuItemCard key={item?.id} card={item} />
             ))}
           </div>
         </div>
