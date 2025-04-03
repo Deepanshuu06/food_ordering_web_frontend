@@ -1,5 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { RESTAURANTS_API } from "../../constant";
 import HeroSection from "./HeroSection";
 import TopRestaurantSection from "./TopRestaurantSection";
 import AllRestaurantSection from "./AllRestaurantSection";
@@ -38,6 +39,9 @@ function Body() {
     fetchData();
   }, [lat, lng]);
 
+
+
+  
 
  
   

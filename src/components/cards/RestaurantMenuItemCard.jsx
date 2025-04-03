@@ -3,16 +3,15 @@ import { MENU_ITEM_CONST_IMAGE_URL } from "../../../constant";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addToCart,
-  decreaseQuantity,
   increaseQuantity,
-  removeFromCart,
 } from "../utils/slices/cartSlice";
 import { ToastContainer, toast } from "react-toastify";
 
 function RestaurantMenuItemCard({ card }) {
   const [isMenuItemCardOpen, setIsMenuItemCardOpen] = useState(true);
   const [isDiscriptionExpanded, setIsDiscriptionExpanded] = useState(false);
-  const [isRestaurantMenuItemModel ,setIsRestaurantMenuItemModel ] = useState(false)
+  const [isRestaurantMenuItemModel, setIsRestaurantMenuItemModel] =
+    useState(false);
 
   function handleisMenuItemCardOpen() {
     setIsMenuItemCardOpen(!isMenuItemCardOpen);
@@ -28,10 +27,7 @@ function RestaurantMenuItemCard({ card }) {
   // const existingItem =
   const quantity = existingItem ? existingItem.itemQuantity : 0;
 
- 
-  
-
-  const handleAddToCart = (info) => {
+  const handleAddToCart = (info , restaurantDetails) => {
     const foundItem = items.find((item) => item.id === info?.id);
 
     if (foundItem) {
@@ -43,22 +39,11 @@ function RestaurantMenuItemCard({ card }) {
       dispatch(addToCart({ ...info, itemQuantity: 1 }));
       notify("added to cart");
     }
+    
   };
 
-  const handleUpdateQuantity = (data, type) => {
-    if (type === "increase" && data.itemQuantity < 15) {
-      dispatch(increaseQuantity({ id: data.id }));
-    }
 
-    if (type === "decrease") {
-      if (data.itemQuantity > 1) {
-        dispatch(decreaseQuantity({ id: data.id }));
-      } else {
-        dispatch(removeFromCart({ id: data.id }));
-      }
-    }
-  };
-
+  
   const notify = (text) => toast(text);
 
   if (card?.itemCards) {
@@ -157,16 +142,13 @@ function RestaurantMenuItemCard({ card }) {
                       />
                       {/* Add to Cart Button */}
                       <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-gray-100/90 to-transparent flex items-end justify-center pb-1">
-                       
                         <button
                           className={`bg-white border border-gray-300 text-green-600 font-semibold px-3 py-1 rounded-md hover:bg-gray-100 transition-colors text-sm shadow-sm cursor-pointer `}
-                          onClick={() =>{
-                             handleAddToCart(info) 
-
-                          } } >
-                          
-                            <h1>Add to Cart</h1>
-                      
+                          onClick={() => {
+                            handleAddToCart(info);
+                          }}
+                        >
+                          <h1>Add to Cart</h1>
                         </button>
 
                         <ToastContainer

@@ -201,7 +201,7 @@ function RestaurantDetailsSection() {
             {/* Menu Section */}
             <div className="pt-5">
               {actualMenuData.map(({ card: { card } }) => (
-                <MenuSection card={card} />
+                <MenuSection card={card} restaurantDetails={restaurantDetails} />
               ))}
             </div>
           </div>

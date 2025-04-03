@@ -1,9 +1,9 @@
 import React from "react";
 import RestaurantMenuItemCard from "./cards/RestaurantMenuItemCard";
 
-function MenuSection({ card }) {
+function MenuSection({ card  , restaurantDetails }) {
  
-    return <RestaurantMenuItemCard card={card} />;
+    return <RestaurantMenuItemCard card={card} restaurantDetails={restaurantDetails} />;
   
 
 //   if (card?.categories) {

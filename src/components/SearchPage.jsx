@@ -191,6 +191,8 @@ function SearchPage() {
         )}
 
         {/* Results Display */}
+
+      
         {isDishSectionOpen && <SearchDishSection data={DishData} />}
         {isRestaurantSectionOpen && (
           <SearchRestaurantSection data={RestaurantData} />

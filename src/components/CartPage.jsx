@@ -204,8 +204,7 @@ function CartPage() {
                         src={`${MENU_ITEM_CONST_IMAGE_URL}${item.imageId}`}
                         alt={item?.name || "Menu Item"}
                       />
-                      <h1>{console.log(item)
-                      }</h1>
+
                     </div>
                     <div className="w-[90%]">
                       <h2 className="text-[10px]">{item?.name}</h2>
