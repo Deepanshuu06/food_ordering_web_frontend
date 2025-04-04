@@ -84,7 +84,7 @@ function SearchPage() {
       );
       setDishData(
         data?.data?.cards[1]?.groupedCard?.cardGroupMap.DISH?.cards || []
-      );
+      ); 
 
       setIsSearchResultDetailsSectionOpen(true);
       setIsRestaurantSectionOpen(item?.type === "RESTAURANT");
@@ -97,7 +97,7 @@ function SearchPage() {
   return (
     <div className="w-full h-screen">
       <div className="w-[70%] mx-auto h-full">
-        <div className="pt-20 sticky top-5 z-50 bg-white">
+        <div className="pt-20 sticky top-5 z-20 bg-white">
           <input
             className="bg-white w-full p-4 outline-none border-2"
             type="text"
