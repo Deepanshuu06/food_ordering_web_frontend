@@ -1,2 +1,17 @@
 @import "@flaticon/flaticon-uicons/css/all/all";
 @import "tailwindcss";
+
+.filterButton {
+    background-color: white; 
+    color: gray;
+    padding: 5px 10px;
+    border: 1px solid gray;
+    border-radius: 50px;
+    font-size: small;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+
+    outline: none; 
+    box-shadow: 0 3px 3px gray;
+}
+

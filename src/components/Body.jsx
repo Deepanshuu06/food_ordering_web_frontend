@@ -15,8 +15,7 @@ function Body() {
 
   const [isUnserviceableLocation, setIsUnserviceableLocation] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const {lng , lat} = useSelector((state)=>state.location)
-
+  const { lng, lat } = useSelector((state) => state.location);
 
   async function fetchData() {
     const response = await fetch(
@@ -39,33 +38,28 @@ function Body() {
     fetchData();
   }, [lat, lng]);
 
-
-
-  
-
- 
-  
-
   return (
     <div className="w-full mx-auto ">
-      {isLoading && <RestaurantShimmer />}
-      <div className="w-[80%] mx-auto">
+      {isLoading ? (
+        <RestaurantShimmer />
+      ) : (
+        <div className="w-[80%] mx-auto">
+          {isUnserviceableLocation && (
+            <UnServiceableLocation data={isUnserviceableLocation} />
+          )}
 
-    {
-      isUnserviceableLocation && <UnServiceableLocation data={isUnserviceableLocation}/>
-    }
-
-        {!isUnserviceableLocation && (
-          <>
-            <HeroSection data={heroSectionData} />
-            <TopRestaurantSection data={topRestaurants} />
-            <AllRestaurantSection
-              data={allRestaurant}
-              title={data?.data?.cards[2]?.card?.card}
-            />
-          </>
-        )}
-      </div>
+          {!isUnserviceableLocation && (
+            <>
+              <HeroSection data={heroSectionData} />
+              <TopRestaurantSection data={topRestaurants} />
+              <AllRestaurantSection
+                data={allRestaurant}
+                title={data?.data?.cards[2]?.card?.card}
+              />
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }

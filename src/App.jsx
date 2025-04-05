@@ -6,6 +6,7 @@ import { Provider, useSelector } from "react-redux";
 import store from "./components/utils/store";
 
 import ScrollToTop from "./components/utils/ScrollToTop";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const [isLocationSectionVisible, setIsLocationSectionVisible] =
@@ -22,6 +23,7 @@ function App() {
             "pt-16" + (locationToggle ? " overflow-hidden max-h-screen" : "")
           }
         >
+          <Toaster/>
           <Outlet />
         </div>
     </Provider>

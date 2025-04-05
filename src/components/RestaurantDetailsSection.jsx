@@ -5,12 +5,14 @@ import RestaurantsMenuShimmer from "./Shimmers/RestaurantsMenuShimmer";
 import OffersCard from "./cards/OffersCard";
 import OffersModal from "./cards/OfferModal";
 import MenuSection from "./MenuSection";
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { clearCart } from "./utils/slices/cartSlice";
+import { toggleDifferentRestaurantPopUp } from "./utils/slices/toggleSlice";
 
 function RestaurantDetailsSection() {
-
-  const {lng , lat} = useSelector((state)=>state.location)
+  const { lng, lat } = useSelector((state) => state.location);
   const navigate = useNavigate();
   const params = useParams();
   const restaurantId = params?.id;
@@ -23,6 +25,8 @@ function RestaurantDetailsSection() {
   const [offers, setOffers] = useState([]);
   const [offercardTranslateValue, setOffercardTranslateValue] = useState(0);
   const [selectedOffer, setSelectedOffer] = useState(null);
+  const { differentRestaurantPopUp } = useSelector((state) => state.toggle);
+  const dispatch = useDispatch();
 
   async function fetchdata() {
     const data = await fetch(
@@ -70,14 +74,11 @@ function RestaurantDetailsSection() {
 
   const prevCoords = useRef({ lat, lng });
 
-  
-  
-
   // Redirection when lat/lng change
   useEffect(() => {
     if (lat !== prevCoords.current.lat || lng !== prevCoords.current.lng) {
       prevCoords.current = { lat, lng };
-      navigate('/'); 
+      navigate("/");
     }
   }, [lat, lng, navigate]);
 
@@ -87,7 +88,44 @@ function RestaurantDetailsSection() {
         {isLoading ? (
           <RestaurantsMenuShimmer />
         ) : (
-          <div>
+          <div className="relative w-full ">
+            <div >
+              {differentRestaurantPopUp && (
+                <div className="flex justify-center items-center">
+                  <div className=" h-[30%] w-[90%] lg:h-[30%] lg:w-[40%] z-30 fixed bottom-3 bg-white p-8 rounded-lg shadow-2xl shadow-black space-y-1 gap-5 flex flex-col">
+                    <div className="flex flex-col gap-2">
+                      <h1 className="text-lg lg:text-xl font-bold  text-black">
+                        Items Already in Cart
+                      </h1>
+                      <p className="text-gray-700 text-xs  lg:text-[15px] ">
+                        Your cart contains items from another restaurant. Would
+                        you like to reset your cart to add items from this
+                        restaurant?
+                      </p>
+                    </div>
+                    <div className="flex justify-center space-x-4">
+                      <button
+                        className="px-2 lg:px-6 lg:py-2 py-1 bg-white text-emerald-600 w-[50%] border-2 border-green-800 text-xs  font-semibold transition duration-300 hover:bg-gray-100"
+                        onClick={() => dispatch(toggleDifferentRestaurantPopUp())}
+                      >
+                        NO
+                      </button>
+                      <button
+                        className="px-2 lg:px-6 lg:py-2 py-1 bg-emerald-600 text-white w-[50%] text-md font-bold text-xs  transition duration-300 hover:bg-emerald-800"
+                        onClick={() => {
+                          dispatch(clearCart());
+                          toast.success("Cart cleared, now you can add items");
+                          dispatch(toggleDifferentRestaurantPopUp())
+                        }}
+                      >
+                        YES, START AFRESH
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* Navigation */}
             <p className="text-xs font-mono pt-8 text-slate-400">
               {" "}
@@ -201,7 +239,10 @@ function RestaurantDetailsSection() {
             {/* Menu Section */}
             <div className="pt-5">
               {actualMenuData.map(({ card: { card } }) => (
-                <MenuSection card={card} restaurantDetails={restaurantDetails} />
+                <MenuSection
+                  card={card}
+                  restaurantDetails={restaurantDetails}
+                />
               ))}
             </div>
           </div>

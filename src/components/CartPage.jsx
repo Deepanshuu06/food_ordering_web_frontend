@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  clearCart,
   decreaseQuantity,
   increaseQuantity,
   removeFromCart,
+  setResInfo,
 } from "./utils/slices/cartSlice";
 import { MENU_ITEM_CONST_IMAGE_URL } from "../../constant";
+import toast from "react-hot-toast";
 
 function CartPage() {
   const cart = useSelector((state) => state.cart);
@@ -13,6 +16,8 @@ function CartPage() {
   const [suggestions, setSuggestions] = useState("");
   const [isSignInFormOpen, setIsSignInFormOpen] = useState(false);
   const [isSignUpFormOpen, setIsSignUpFormOpen] = useState(false);
+
+  console.log(cart.resInfo);
 
   const itemTotal =
     cart?.items?.reduce(
@@ -42,6 +47,9 @@ function CartPage() {
         dispatch(decreaseQuantity({ id: data.id }));
       } else {
         dispatch(removeFromCart({ id: data.id }));
+        if (cart?.items?.length == 1) {
+          dispatch(setResInfo(null));
+        }
       }
     }
   };
@@ -186,8 +194,28 @@ function CartPage() {
 
         {/* Right Section (Cart Items) */}
         <div className="w-full lg:w-[40%] bg-white p-5 sticky top-10 max-h-[80vh] overflow-y-auto shadow-md rounded-md">
-          <div className="bg-white p-4 rounded-md shadow-md mb-4">
-            <h1 className="text-xl font-bold">Cart Items</h1>
+          <div className="bg-white p-4 rounded-md shadow-md mb-4 flex items-center gap-4">
+            {cart?.items?.length > 0 ? (
+              <div className="flex items-center gap-4">
+                <img
+                  src={`${MENU_ITEM_CONST_IMAGE_URL}${cart?.resInfo?.cloudinaryImageId}`}
+                  alt={cart?.resInfo?.name || "Restaurant"}
+                  className="w-12 h-12 rounded-lg object-cover"
+                />
+                <div>
+                  <p className="text-sm text-gray-500">You are ordering from</p>
+                  <h1 className="text-xl font-bold text-gray-800">
+                    {cart?.resInfo?.name}
+                  </h1>
+                </div>
+              </div>
+            ) : (
+              <div className="flex w-full justify-center items-center">
+                <p className="text-gray-500 text-lg">
+                  Add items from restaurant
+                </p>
+              </div>
+            )}
           </div>
 
           {cart?.items?.length > 0 ? (
@@ -204,14 +232,14 @@ function CartPage() {
                         src={`${MENU_ITEM_CONST_IMAGE_URL}${item.imageId}`}
                         alt={item?.name || "Menu Item"}
                       />
-
                     </div>
                     <div className="w-[90%]">
                       <h2 className="text-[10px]">{item?.name}</h2>
-                      {(item?.addons) ? <p className="text-sm text-gray-500">
-                       customize
-                       </p> : "" }
-                      
+                      {item?.addons ? (
+                        <p className="text-sm text-gray-500">customize</p>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </div>
                   <div className="flex items-center  border-slate-600 border justify-around">
@@ -247,7 +275,15 @@ function CartPage() {
             <p className="text-center text-gray-500">Your cart is empty.</p>
           )}
 
-          <div className="mt-4">
+          <div className="mt-4 flex-col flex gap-2">
+          { cart?.items?.length > 0 ? <button
+              className="w-full bg-red-400 rounded-xl  p-2 text-white font-bold cursor-pointer"
+              onClick={() =>{ dispatch(clearCart()),
+                toast.success("Cart is Empty Now" , {duration:2000 ,icon:"🛒"})
+              }}
+            >
+              clear cart
+            </button> : null}
             <input
               type="text"
               value={suggestions}

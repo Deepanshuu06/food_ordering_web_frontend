@@ -3,7 +3,10 @@ import { LATandLONG_API, LOCATION_API, NAVBAR_LOGO_PNG } from "../../constant";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setCoordinates } from "./utils/slices/locationSlice";
-import { changeLocationToggle, changeLoginToggle } from "./utils/slices/toggleSlice";
+import {
+  changeLocationToggle,
+  changeLoginToggle,
+} from "./utils/slices/toggleSlice";
 
 function Navbar() {
   const dispatch = useDispatch();
@@ -35,7 +38,6 @@ function Navbar() {
       name: "Sign In",
       icon: <i className="fi fi-rr-user"></i>,
       onClick: () => dispatch(changeLoginToggle(true)),
-
     },
     {
       name: "Cart",
@@ -89,18 +91,15 @@ function Navbar() {
   };
 
   useEffect(() => {
-    if (locationSearchText.length > 2) {
+    if (locationSearchText?.length > 2) {
       fetchLocation();
     }
   }, [locationSearchText]);
-
-
 
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
   });
-
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -109,9 +108,6 @@ function Navbar() {
 
     dispatch(changeLoginToggle(false));
   };
-
-
-
 
   return (
     <div>
@@ -149,7 +145,7 @@ function Navbar() {
               onChange={(e) => setLocationSearchText(e.target.value)}
             />
 
-            {locationSearchText.length <= 2 && (
+            {locationSearchText?.length <= 2 && (
               <div
                 className="w-full p-4 border border-slate-300 rounded-lg bg-white flex items-center gap-4 cursor-pointer hover:bg-gray-50"
                 onClick={getUserLocation}
@@ -189,9 +185,8 @@ function Navbar() {
         </div>
       </div>
 
-
-         {/* New Login Modal */}
-         <div
+      {/* New Login Modal */}
+      <div
         className={`fixed inset-0 z-50 transition-all duration-300 flex ${
           loginToggle
             ? "opacity-100 visible pointer-events-auto"
@@ -218,7 +213,7 @@ function Navbar() {
             </button>
 
             <h2 className="text-2xl font-bold text-center">Sign In</h2>
-            
+
             <form onSubmit={handleLogin} className="flex flex-col gap-4">
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-700">
@@ -228,7 +223,9 @@ function Navbar() {
                   type="email"
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                   value={loginData.email}
-                  onChange={(e) => setLoginData({...loginData, email: e.target.value})}
+                  onChange={(e) =>
+                    setLoginData({ ...loginData, email: e.target.value })
+                  }
                   required
                 />
               </div>
@@ -241,7 +238,9 @@ function Navbar() {
                   type="password"
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                   value={loginData.password}
-                  onChange={(e) => setLoginData({...loginData, password: e.target.value})}
+                  onChange={(e) =>
+                    setLoginData({ ...loginData, password: e.target.value })
+                  }
                   required
                 />
               </div>
@@ -271,10 +270,6 @@ function Navbar() {
         </div>
       </div>
 
-      
-
-
-
       {/* Main Navbar */}
       <div className="w-full shadow-md h-16 flex items-center justify-center fixed top-0 bg-white z-30">
         <div className="w-[95%] flex justify-between items-center">
@@ -298,7 +293,7 @@ function Navbar() {
           </div>
 
           <div className="hidden lg:flex items-center gap-8">
-          {navItems.map((item) => (
+            {navItems.map((item) =>
               item.link ? (
                 <Link
                   key={item.name}
@@ -318,10 +313,10 @@ function Navbar() {
                   <span className="text-sm font-medium">{item.name}</span>
                 </button>
               )
-            ))}
+            )}
             <div className="flex items-center gap-2 ml-4">
               <span className="text-sm font-medium">
-                Cart: {items.length} items
+                Cart: {items?.length} items
               </span>
               <span className="text-sm font-medium text-orange-500">
                 ₹{Math.ceil(totalprice / 100)}

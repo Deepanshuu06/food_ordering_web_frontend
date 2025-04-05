@@ -10,7 +10,7 @@ function RestaurantCard({ data }) {
 
   return (
     <Link to={`/restaurantmenu/${ctaLink.split("/")[5]}`}>
-      <div className="h-72 w-72 lg:w-60 bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-95 pb-3 ">
+      <div className="h-72 w-64 lg:w-60 bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-95 pb-3 ">
         <div className="relative w-full h-40">
           <img
             className="w-full h-40 object-cover rounded-b-2xl"

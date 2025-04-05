@@ -1,65 +1,77 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import RestaurantCard from "./RestaurantCard";
 
 function TopRestaurantSection({ data }) {
   const topRestaurantSectionTitle = data?.header?.title;
-  const topRestaurantList =
-    data?.gridElements?.infoWithStyle?.restaurants || [];
+  const topRestaurantList = data?.gridElements?.infoWithStyle?.restaurants || [];
 
   const [translateValue, setTranslateValue] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  const cardWidth = 250;
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Dynamic card width based on screen size
+  const cardWidth = windowWidth < 768 ? windowWidth * 0.8 : 250;
   const cardGap = 16;
   const totalCardWidth = cardWidth + cardGap;
-  const maxTranslateValue = (topRestaurantList.length - 1) * totalCardWidth;
+  const maxTranslateValue = Math.max(0, (topRestaurantList.length - 1) * totalCardWidth);
 
   function handlePrev() {
     if (translateValue > 0) {
-      setTranslateValue((prev) => prev - totalCardWidth);
+      setTranslateValue((prev) => Math.max(0, prev - totalCardWidth));
     }
   }
 
   function handleNext() {
     if (translateValue < maxTranslateValue) {
-      setTranslateValue((prev) => prev + totalCardWidth);
+      setTranslateValue((prev) => Math.min(maxTranslateValue, prev + totalCardWidth));
     }
   }
 
   return (
-    <div className="mt-10">
-      <div className="justify-between items-center py-5 flex">
-        <h1 className="text-2xl font-bold">{topRestaurantSectionTitle}</h1>
-        <div className="justify-between flex gap-6 items-center">
-          <i
-            onClick={handlePrev}
-            className={`fi text-3xl fi-br-angle-circle-left cursor-pointer ${
-              translateValue === 0 ? "text-gray-400" : "text-black"
-            }`}
-          ></i>
+    <div className="mt-10 px-4">
+      {topRestaurantList.length > 0 && (
+        <div className="flex justify-between items-center py-5">
+          <h1 className="text-2xl font-bold">{topRestaurantSectionTitle}</h1>
+          <div className="flex gap-6 items-center">
+            <i
+              onClick={handlePrev}
+              className={`fi text-xl lg:text-2xl md:text-2xl fi-br-angle-circle-left cursor-pointer${
+                translateValue === 0 ? "text-gray-400" : "text-black"
+              }`}
+              style={{ pointerEvents: translateValue === 0 ? "none" : "auto" }}
+            >
 
-          <i
-            onClick={handleNext}
-            className={`fi text-3xl fi-br-angle-circle-right cursor-pointer ${
-              translateValue === maxTranslateValue
-                ? "text-gray-400"
-                : "text-black"
-            }`}
-          ></i>
+            </i>
+            <i
+              onClick={handleNext}
+              className={`fi text-xl lg:text-2xl md:text-2xl fi-br-angle-circle-right cursor-pointer ${
+                translateValue === maxTranslateValue
+                  ? "text-gray-400"
+                  : "text-black"
+              }`}
+              style={{ pointerEvents: translateValue === maxTranslateValue ? "none" : "auto" }}
+            >
+
+            </i>
+          </div>
         </div>
-      </div>
+      )}
 
-      <div className="w-full mx-auto overflow-hidden">
+      <div className="w-full overflow-hidden">
         <div
-          className="flex duration-500 gap-20 lg:gap-4"
+          className="flex transition-transform duration-300 gap-4"
           style={{ transform: `translateX(-${translateValue}px)` }}
         >
-          {topRestaurantList.map((restaurant) => {
-            return (
-              <div key={restaurant.id} style={{ minWidth: `${cardWidth}px` }}>
-                <RestaurantCard data={restaurant} key={restaurant?.info?.id} />
-              </div>
-            );
-          })}
+          {topRestaurantList.map((restaurant) => (
+            <div key={restaurant.id} style={{ minWidth: `${cardWidth}px` }}>
+              <RestaurantCard data={restaurant} />
+            </div>
+          ))}
         </div>
       </div>
     </div>
