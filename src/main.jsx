@@ -15,6 +15,7 @@ import CorporatePage from "./components/CorporatePage";
 import OffersPage from "./components/OffersPage";
 
 import { createBrowserRouter } from "react-router-dom";
+import MyAccount from "./components/MyAccount";
 
 // Create a router
 const appRouter = createBrowserRouter([
@@ -29,6 +30,7 @@ const appRouter = createBrowserRouter([
       { path: "/search", element: <SearchPage /> },
       { path: "/corporate", element: <CorporatePage /> },
       { path: "/offers", element: <OffersPage /> },
+      { path: "/my-account", element: <MyAccount/> },
     ],
   },
 ]);

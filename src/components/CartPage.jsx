@@ -16,8 +16,7 @@ function CartPage() {
   const [suggestions, setSuggestions] = useState("");
   const [isSignInFormOpen, setIsSignInFormOpen] = useState(false);
   const [isSignUpFormOpen, setIsSignUpFormOpen] = useState(false);
-
-  console.log(cart.resInfo);
+  const { userCredential } = useSelector((state) => state.auth);
 
   const itemTotal =
     cart?.items?.reduce(
@@ -54,128 +53,140 @@ function CartPage() {
     }
   };
 
+  const handleCheckOut = () => {
+    if (userCredential) {
+      toast.success("order placed");
+    } else {
+      setIsSignUpFormOpen(true);
+      toast.error("Log In to Place order");
+    }
+  };
+
   return (
     <div className="w-full mx-auto bg-slate-100 pt-10 min-h-screen">
       <div className="w-[90%] mx-auto flex flex-col lg:flex-row gap-8">
         {/* Left Section */}
         <div className="w-full lg:w-[70%] flex flex-col gap-8">
-          <div className="flex bg-white p-12 shadow-md rounded-md">
-            <div className="w-full flex flex-col gap-4">
-              <h1 className="text-xl font-bold">Account</h1>
-              <p className="text-slate-500 text-sm">
-                To place your order now, log in to your existing account or sign
-                up.
-              </p>
-              <div className="flex gap-4">
-                <button
-                  className="flex items-center justify-center gap-2 border-green-600 border-2 py-2 px-6 text-green-600 cursor-pointer text-sm hover:bg-green-100 rounded-md transition"
-                  onClick={() => {
-                    setIsSignInFormOpen(true);
-                    setIsSignUpFormOpen(false);
-                  }}
-                >
-                  <span>Sign In</span>
-                </button>
-                <button
-                  className="flex items-center justify-center gap-2 border-green-600 bg-green-700 border-2 py-2 px-6 text-white cursor-pointer text-sm hover:bg-green-800 rounded-md transition"
-                  onClick={() => {
-                    setIsSignUpFormOpen(true);
-                    setIsSignInFormOpen(false);
-                  }}
-                >
-                  <span>SIGN UP</span>
-                </button>
+          {/* Login Section */}
+          {!userCredential && (
+            <div className="flex bg-white p-12 shadow-md rounded-md">
+              <div className="w-full flex flex-col gap-4">
+                <h1 className="text-xl font-bold">Account</h1>
+                <p className="text-slate-500 text-sm">
+                  To place your order now, log in to your existing account or
+                  sign up.
+                </p>
+                <div className="flex gap-4">
+                  <button
+                    className="flex items-center justify-center gap-2 border-green-600 border-2 py-2 px-6 text-green-600 cursor-pointer text-sm hover:bg-green-100 rounded-md transition"
+                    onClick={() => {
+                      setIsSignInFormOpen(true);
+                      setIsSignUpFormOpen(false);
+                    }}
+                  >
+                    <span>Sign In</span>
+                  </button>
+                  <button
+                    className="flex items-center justify-center gap-2 border-green-600 bg-green-700 border-2 py-2 px-6 text-white cursor-pointer text-sm hover:bg-green-800 rounded-md transition"
+                    onClick={() => {
+                      setIsSignUpFormOpen(true);
+                      setIsSignInFormOpen(false);
+                    }}
+                  >
+                    <span>SIGN UP</span>
+                  </button>
+                </div>
+
+                {/* Sign Up form */}
+                {isSignUpFormOpen && (
+                  <div className="w-full">
+                    <h1 className="font-bold py-2">
+                      Sign up or log in to your account
+                    </h1>
+                    <form
+                      action="signUp"
+                      className="flex flex-col gap-2"
+                      method="post"
+                    >
+                      <input
+                        className="border-1 border-slate-300 p-5 w-[80%] outline-none  "
+                        type="text"
+                        name="phoneNumber"
+                        placeholder="Phone Number"
+                      />
+                      <input
+                        className="border-1 border-slate-300 p-5 w-[80%] outline-none "
+                        type="text"
+                        name="name"
+                        id="name"
+                        placeholder="Name"
+                      />
+                      <input
+                        className="border-1 border-slate-300 p-5 w-[80%] outline-none "
+                        type="text"
+                        name="email"
+                        id="email"
+                        placeholder="Email"
+                      />
+                      <input
+                        className="border-1 border-slate-300 p-5 w-[80%] outline-none "
+                        type="text"
+                        name="referralCode"
+                        id="referralCode"
+                        placeholder="Referral Code"
+                      />
+                      <button
+                        className="border-1 border-slate-300 bg-green-600 text-white p-5 w-[80%] outline-none"
+                        type="submit"
+                      >
+                        Continue
+                      </button>
+                      <p className="text-xs w-[80%]">
+                        By creating an account, I accept the Terms & Conditions
+                        & Privacy Policy
+                      </p>
+                    </form>
+                  </div>
+                )}
+
+                {/* Sign In form */}
+                {isSignInFormOpen && (
+                  <div className="w-full">
+                    <h1 className="font-bold py-2">
+                      Enter login details or create an account
+                    </h1>
+                    <form
+                      action="signIn"
+                      className="flex flex-col gap-2"
+                      method="post"
+                    >
+                      <input
+                        className="border-1 border-slate-300 p-5 w-[80%] outline-none "
+                        type="text"
+                        name="phoneNumber"
+                        placeholder="Phone Number"
+                      />
+                      <button
+                        className="border-1 border-slate-300 bg-green-600 text-white p-5 w-[80%] outline-none"
+                        type="submit"
+                      >
+                        Login
+                      </button>
+                      <p className="text-xs w-[80%]">
+                        By creating an account, I accept the Terms & Conditions
+                        & Privacy Policy
+                      </p>
+                    </form>
+                  </div>
+                )}
               </div>
-
-              {/* Sign Up form */}
-              {isSignUpFormOpen && (
-                <div className="w-full">
-                  <h1 className="font-bold py-2">
-                    Sign up or log in to your account
-                  </h1>
-                  <form
-                    action="signUp"
-                    className="flex flex-col gap-2"
-                    method="post"
-                  >
-                    <input
-                      className="border-1 border-slate-300 p-5 w-[80%] outline-none  "
-                      type="text"
-                      name="phoneNumber"
-                      placeholder="Phone Number"
-                    />
-                    <input
-                      className="border-1 border-slate-300 p-5 w-[80%] outline-none "
-                      type="text"
-                      name="name"
-                      id="name"
-                      placeholder="Name"
-                    />
-                    <input
-                      className="border-1 border-slate-300 p-5 w-[80%] outline-none "
-                      type="text"
-                      name="email"
-                      id="email"
-                      placeholder="Email"
-                    />
-                    <input
-                      className="border-1 border-slate-300 p-5 w-[80%] outline-none "
-                      type="text"
-                      name="referralCode"
-                      id="referralCode"
-                      placeholder="Referral Code"
-                    />
-                    <button
-                      className="border-1 border-slate-300 bg-green-600 text-white p-5 w-[80%] outline-none"
-                      type="submit"
-                    >
-                      Continue
-                    </button>
-                    <p className="text-xs w-[80%]">
-                      By creating an account, I accept the Terms & Conditions &
-                      Privacy Policy
-                    </p>
-                  </form>
-                </div>
-              )}
-
-              {/* Sign In form */}
-              {isSignInFormOpen && (
-                <div className="w-full">
-                  <h1 className="font-bold py-2">
-                    Enter login details or create an account
-                  </h1>
-                  <form
-                    action="signIn"
-                    className="flex flex-col gap-2"
-                    method="post"
-                  >
-                    <input
-                      className="border-1 border-slate-300 p-5 w-[80%] outline-none "
-                      type="text"
-                      name="phoneNumber"
-                      placeholder="Phone Number"
-                    />
-                    <button
-                      className="border-1 border-slate-300 bg-green-600 text-white p-5 w-[80%] outline-none"
-                      type="submit"
-                    >
-                      Login
-                    </button>
-                    <p className="text-xs w-[80%]">
-                      By creating an account, I accept the Terms & Conditions &
-                      Privacy Policy
-                    </p>
-                  </form>
-                </div>
-              )}
+              <img
+                src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_147,h_140/Image-login_btpq7r"
+                alt="Account"
+                className="w-32 h-32 object-cover ml-4"
+              />
             </div>
-            <img
-              src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_147,h_140/Image-login_btpq7r"
-              alt="Account"
-              className="w-32 h-32 object-cover ml-4"
-            />
-          </div>
+          )}
 
           <div className="bg-white p-8 shadow-md rounded-md">
             <h1 className="text-xl font-bold">Delivery Address</h1>
@@ -276,14 +287,20 @@ function CartPage() {
           )}
 
           <div className="mt-4 flex-col flex gap-2">
-          { cart?.items?.length > 0 ? <button
-              className="w-full bg-red-400 rounded-xl  p-2 text-white font-bold cursor-pointer"
-              onClick={() =>{ dispatch(clearCart()),
-                toast.success("Cart is Empty Now" , {duration:2000 ,icon:"🛒"})
-              }}
-            >
-              clear cart
-            </button> : null}
+            {cart?.items?.length > 0 ? (
+              <button
+                className="w-full bg-red-400 rounded-xl  p-2 text-white font-bold cursor-pointer"
+                onClick={() => {
+                  dispatch(clearCart()),
+                    toast.success("Cart is Empty Now", {
+                      duration: 2000,
+                      icon: "🛒",
+                    });
+                }}
+              >
+                clear cart
+              </button>
+            ) : null}
             <input
               type="text"
               value={suggestions}
@@ -335,7 +352,10 @@ function CartPage() {
           </div>
 
           {/* ✅ Checkout Button */}
-          <button className="bg-green-700 text-white py-3 px-6 rounded-md hover:bg-green-800 transition-all duration-300 w-full mt-6 shadow-lg transform hover:scale-105">
+          <button
+            className="bg-green-700 text-white py-3 px-6 rounded-md hover:bg-green-800 transition-all duration-300 w-full mt-6 shadow-lg transform hover:scale-105"
+            onClick={() => handleCheckOut()}
+          >
             Proceed to Checkout
           </button>
         </div>

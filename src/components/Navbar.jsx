@@ -7,6 +7,8 @@ import {
   changeLocationToggle,
   changeLoginToggle,
 } from "./utils/slices/toggleSlice";
+import { auth, provider, signInWithPopup } from "../config/FireBaseAuth";
+import { addUserData } from "./utils/slices/authSlice";
 
 function Navbar() {
   const dispatch = useDispatch();
@@ -16,6 +18,7 @@ function Navbar() {
   const [locationSearchResult, setLocationSearchResult] = useState([]);
   const [error, setError] = useState(null);
   const { items, totalprice } = useSelector((state) => state.cart);
+  const { userCredential } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const navItems = [
@@ -108,6 +111,17 @@ function Navbar() {
 
     dispatch(changeLoginToggle(false));
   };
+
+  const handleauth = async () => {
+    let data = await signInWithPopup(auth, provider);    
+    const userdata = data;
+    dispatch(addUserData(userdata));
+  };
+
+  if(userCredential){
+    dispatch(changeLoginToggle(false))
+  }
+  const { email, displayName, photoURL, phoneNumber } = userCredential?.user || {};
 
   return (
     <div>
@@ -251,6 +265,12 @@ function Navbar() {
               >
                 Sign In
               </button>
+              <button
+                className="w-full py-2 px-4 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+                onClick={() => handleauth()}
+              >
+                Sign In with google
+              </button>
 
               <div className="text-center text-sm text-gray-600">
                 Don't have an account?{" "}
@@ -303,11 +323,20 @@ function Navbar() {
                   {item.icon}
                   <span className="text-sm font-medium">{item.name}</span>
                 </Link>
+              ) : userCredential ? (
+                <Link to={"/my-account"}>
+                  <button className="flex items-center gap-2 text-gray-600 hover:text-orange-500 transition-colors cursor-pointer">
+                    {item.icon}
+                    <span className="text-sm font-medium">
+                      {displayName  }
+                    </span>
+                  </button>
+                </Link>
               ) : (
                 <button
                   key={item.name}
                   onClick={item.onClick}
-                  className="flex items-center gap-2 text-gray-600 hover:text-orange-500 transition-colors"
+                  className="flex items-center gap-2 text-gray-600 hover:text-orange-500 transition-colors cursor-pointer"
                 >
                   {item.icon}
                   <span className="text-sm font-medium">{item.name}</span>

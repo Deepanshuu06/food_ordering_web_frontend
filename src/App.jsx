@@ -15,17 +15,16 @@ function App() {
 
   return (
     <Provider store={store}>
-   
-        <ScrollToTop />
-        <Navbar />
-        <div
-          className={
-            "pt-16" + (locationToggle ? " overflow-hidden max-h-screen" : "")
-          }
-        >
-          <Toaster/>
-          <Outlet />
-        </div>
+      <ScrollToTop />
+      <Navbar />
+      <div
+        className={
+          "pt-16" + (locationToggle ? " overflow-hidden max-h-screen" : "")
+        }
+      >
+        <Toaster />
+        <Outlet />
+      </div>
     </Provider>
   );
 }

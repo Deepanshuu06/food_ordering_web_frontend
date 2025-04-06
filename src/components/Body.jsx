@@ -38,12 +38,42 @@ function Body() {
     fetchData();
   }, [lat, lng]);
 
+  // const { filterVal } = useSelector((state) => state.filter);
+
+  // console.log(allRestaurant?.gridElements?.infoWithStyle?.restaurants);
+
+  // const filteredData = allRestaurant?.gridElements?.infoWithStyle?.restaurants?.filter((item) => {
+  //   if (!filterVal) return true;
+
+  //   switch (filterVal) {
+  //     case "Rating 4.0+":
+  //       return item?.info?.avgRating >= 4;
+
+  //     case "Offer":
+  //       return item?.info;
+
+  //     case "Rs. 300 - Rs. 600":
+  //       return;
+
+  //     case "Less than Rs. 300":
+  //       return;
+
+  //     default:
+  //       return true;
+  //   }
+  // });
+
+  // console.log(filteredData);
+
+
+  
+
   return (
     <div className="w-full mx-auto ">
       {isLoading ? (
         <RestaurantShimmer />
       ) : (
-        <div className="w-[80%] mx-auto">
+        <div className="w-[98%] lg:w-[80%] mx-auto">
           {isUnserviceableLocation && (
             <UnServiceableLocation data={isUnserviceableLocation} />
           )}
