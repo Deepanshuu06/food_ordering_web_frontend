@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {  useEffect, useRef, useState } from "react";
 import { RESTAURANTS_MENU_API } from "../../constant";
 import { Link, useParams } from "react-router";
 import RestaurantsMenuShimmer from "./Shimmers/RestaurantsMenuShimmer";
@@ -17,7 +17,7 @@ function RestaurantDetailsSection() {
   const params = useParams();
   const restaurantId = params?.id;
   const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState([]);
+
   const [restaurantDetails, setRestaurantDetails] = useState({});
   // const { topPicksItems, setTopPicksItem } = useState([]);
   // const [menuData, setMenuData] = useState([]);
@@ -33,7 +33,7 @@ function RestaurantDetailsSection() {
       RESTAURANTS_MENU_API + restaurantId.match(/rest(\d+)$/)[1]
     );
     const response = await data.json();
-    setData(response);
+
     setRestaurantDetails(response?.data?.cards[2]?.card?.card?.info);
     setOffers(
       response?.data?.cards[3]?.card?.card?.gridElements?.infoWithStyle?.offers
@@ -223,7 +223,7 @@ function RestaurantDetailsSection() {
             {/* Menu Title Text */}
             <div className="w-full flex items-center pt-10">
               <h1 className="mx-auto font-mono ">Menu</h1>
-              <i class="fi fi-rs-menu-food text-lg p-2 mr-2"></i>
+              <i className="fi fi-rs-menu-food text-lg p-2 mr-2"></i>
             </div>
 
             {/* Search Section */}
@@ -232,16 +232,17 @@ function RestaurantDetailsSection() {
                 <span className="items-center p-2 mx-auto font-bold">
                   Search for dishes
                 </span>
-                <i class="fi fi-br-search text-lg p-2 mr-2"></i>
+                <i className="fi fi-br-search text-lg p-2 mr-2"></i>
               </div>
             </Link>
 
             {/* Menu Section */}
             <div className="pt-5">
-              {actualMenuData.map(({ card: { card } }) => (
+              {actualMenuData.map(({ card: { card } } , index) => (
                 <MenuSection
                   card={card}
                   restaurantDetails={restaurantDetails}
+                  key={card?.info?.id || index}
                 />
               ))}
             </div>

@@ -3,7 +3,6 @@ import { MENU_ITEM_CONST_IMAGE_URL } from "../../../constant";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addToCart,
-  clearCart,
   increaseQuantity,
   setResInfo,
 } from "../utils/slices/cartSlice";
@@ -14,12 +13,12 @@ import { toggleDifferentRestaurantPopUp } from "../utils/slices/toggleSlice";
 function RestaurantMenuItemCard({ card, restaurantDetails }) {
   const [isMenuItemCardOpen, setIsMenuItemCardOpen] = useState(true);
   const [isDiscriptionExpanded, setIsDiscriptionExpanded] = useState(false);
-  const [existingItem, setExistingItem] = useState([]);
+
 
   const dispatch = useDispatch();
   const { items, resInfo } = useSelector((state) => state.cart);
 
-  const quantity = existingItem ? existingItem.itemQuantity : 0;
+
 
   function handleisMenuItemCardOpen() {
     setIsMenuItemCardOpen(!isMenuItemCardOpen);
@@ -45,7 +44,7 @@ function RestaurantMenuItemCard({ card, restaurantDetails }) {
         dispatch(addToCart({ ...info, itemQuantity: 1 }));
         dispatch(setResInfo(restaurantDetails));
         toast.success(`${info.name} added to cart.`, { duration: 1000 });
-        console.log(resInfo);
+
       } else {
         dispatch(toggleDifferentRestaurantPopUp());
       }
@@ -77,9 +76,9 @@ function RestaurantMenuItemCard({ card, restaurantDetails }) {
 
           <div className="px-4 ">
             {isMenuItemCardOpen &&
-              card?.itemCards?.map(({ card: { info } }) => (
+              card?.itemCards?.map(({ card: { info } } , index) => (
                 <div
-                  key={info?.id}
+                  key={info?.id || index}
                   className="flex flex-row justify-between py-6 border-t border-gray-200 duration-1000"
                 >
                   {/* Text Content */}
@@ -197,8 +196,8 @@ function RestaurantMenuItemCard({ card, restaurantDetails }) {
         <div className="px-4 py-4">
           <h2 className="text-xl  text-gray-800 mb-2">{card?.title}</h2>
           <div>
-            {card?.categories?.map((item) => (
-              <RestaurantMenuItemCard key={item?.id} card={item} />
+            {card?.categories?.map((item , index) => (
+              <RestaurantMenuItemCard key={item?.id || index} card={item} />
             ))}
           </div>
         </div>

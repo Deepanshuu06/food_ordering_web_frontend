@@ -29,7 +29,7 @@ function SearchPage() {
   async function fetchPreSearch() {
     try {
       const res = await fetch(
-        `https://www.swiggy.com/dapi/landing/PRE_SEARCH?lat=${lat}&lng=${lng}`
+        `${import.meta.env.VITE_BASEURL}/landing/PRE_SEARCH?lat=${lat}&lng=${lng}`
       );
       const data = await res.json();
 
@@ -45,7 +45,7 @@ function SearchPage() {
   async function fetchSearch() {
     try {
       const res = await fetch(
-        `https://www.swiggy.com/dapi/restaurants/search/suggest?lat=${lat}&lng=${lng}&str=${searchText}&trackingId=null&includeIMItem=true`
+        `${import.meta.env.VITE_BASEURL}/restaurants/search/suggest?lat=${lat}&lng=${lng}&str=${searchText}&trackingId=null&includeIMItem=true`
       );
       const data = await res.json();
       setSearchData(data?.data?.suggestions || []);
@@ -77,7 +77,7 @@ function SearchPage() {
       const encodedMetadata = encodeURIComponent(JSON.stringify(metadata));
 
       const response = await fetch(
-        `https://www.swiggy.com/dapi/restaurants/search/v3?lat=${lat}&lng=${lng}&str=${item.text.replace(
+        `${import.meta.env.VITE_BASEURL}/restaurants/search/v3?lat=${lat}&lng=${lng}&str=${item.text.replace(
           " ",
           "+"
         )}&trackingId=null&submitAction=SUGGESTION&queryUniqueId=b086f011-dec2-de52-81e3-5a4930d22c34&metaData=${encodedMetadata}`

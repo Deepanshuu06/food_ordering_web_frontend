@@ -67,8 +67,8 @@ function TopRestaurantSection({ data }) {
           className="flex transition-transform duration-300 gap-4"
           style={{ transform: `translateX(-${translateValue}px)` }}
         >
-          {topRestaurantList.map((restaurant) => (
-            <div key={restaurant.id} style={{ minWidth: `${cardWidth}px` }}>
+          {topRestaurantList.map((restaurant , index) => (
+            <div key={restaurant.id || index} style={{ minWidth: `${cardWidth}px` }}>
               <RestaurantCard data={restaurant} />
             </div>
           ))}

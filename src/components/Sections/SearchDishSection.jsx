@@ -10,7 +10,7 @@ function SearchDishSection({ data }) {
 
   const fetchdata = async () => {
     const res = await fetch(
-      `https://www.swiggy.com/dapi/restaurants/search/v3?lat=${lat}&lng=${lng}&str=${searchText.replace(
+      `${import.meta.env.VITE_BASEURL}/restaurants/search/v3?lat=${lat}&lng=${lng}&str=${searchText.replace(
         "",
         "+"
       )}&trackingId=undefined&submitAction=SUGGESTION&queryUniqueId=0cf0d26f-6422-8dac-1ad1-e9af14755e44&metaData=%7B%22type%22%3A%22RESTAURANT%22%2C%22data%22%3A%7B%22parentId%22%3A92204%2C%22primaryRestaurantId%22%3A84070%2C%22cloudinaryId%22%3A%22g5txnz35wlrgbskk3r8y%22%2C%22brandId%22%3A92204%2C%22enabled_flag%22%3A1%7D%2C%22businessCategory%22%3A%22SWIGGY_FOOD%22%2C%22displayLabel%22%3A%22Restaurant%22%7D&selectedPLTab=DISH`
@@ -24,9 +24,9 @@ function SearchDishSection({ data }) {
     }
   }, [data, searchText, lat, lng]);
 
-  console.log(acctualDishData);
 
-  console.log(dishesList);
+
+
 
   return (
     <div className="w-full bg-slate-100">
@@ -34,7 +34,9 @@ function SearchDishSection({ data }) {
       {acctualDishData.length > 0 ? (
         <div className="w-full grid grid-cols-2 gap-2 p-3">
           {acctualDishData.map(({ card: { card } }) => (
-            <div className="bg-white px-9 py-5 flex items-center justify-between rounded-2xl">
+            <div className="bg-white px-9 py-5 flex items-center justify-between rounded-2xl"
+            key={card?.info?.id}
+            >
               <div className="flex flex-col gap-2">
                 <h1 className="">{card?.info?.isVeg ? "Veg" : "Non Veg"}</h1>
                 <h1 className="font-bold">{card?.info?.name}</h1>
@@ -61,7 +63,9 @@ function SearchDishSection({ data }) {
       ) : (
         <div className="w-full grid grid-cols-2 gap-2 p-3">
           {dishesList?.map(({ card: { card } }) => (
-            <div className="bg-white px-9 py-5 flex items-center justify-between rounded-2xl">
+            <div className="bg-white px-9 py-5 flex items-center justify-between rounded-2xl"
+            key={card?.info?.id}
+            >
               <div className="flex flex-col gap-2">
                 <h1 className="">{card?.info?.isVeg ? "Veg" : "Non Veg"}</h1>
                 <h1 className="font-bold">{card?.info?.name}</h1>

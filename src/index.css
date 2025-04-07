@@ -2,30 +2,25 @@
 @import "tailwindcss";
 
 .filterButton {
-    color: #4a4a4a; /* Slightly darker gray for better contrast */
-
+    color: #4a4a4a;
     padding: 8px 20px;
-
     border-radius: 50px;
-    font-size: 0.875rem; /* Slightly larger font for readability */
-    font-weight: 500; /* Adds a bit more emphasis */
+    font-size: 0.875rem;
+    font-weight: 500;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
     display: flex;
-    gap: 8px; /* Added unit 'px' for clarity */
+    gap: 8px;
     align-items: center;
-justify-items: center;
+    justify-content: center;  
     outline: none;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* Softer shadow for a subtle depth */
-    user-select: none; /* Prevents text selection on click */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    user-select: none;
 }
 
-/* Hover effect for better interactivity */
+
 .filterButton:hover {
     background-color: #e0e0e0;
     color: #333;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
-
-
-    

@@ -55,7 +55,7 @@ function CorporatePage() {
               { title: "Partner Growth", description: "Empowering restaurant partners with technology and insights" },
               { title: "Innovation First", description: "Continuous innovation in logistics and customer experience" }
             ].map((item, index) => (
-              <div key={index} className="bg-white p-8 rounded-lg border border-gray-300">
+              <div key={item.title || index} className="bg-white p-8 rounded-lg border border-gray-300">
                 <h3 className="text-xl font-semibold mb-4">{item.title}</h3>
                 <p className="text-gray-600">{item.description}</p>
               </div>

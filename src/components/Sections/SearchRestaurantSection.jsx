@@ -14,7 +14,7 @@ function SearchRestaurantSection({ data }) {
 
   const fetchRestaurantdata = async () => {
     const response = await fetch(
-      `https://www.swiggy.com/dapi/restaurants/search/v3?lat=${lat}&lng=${lng}&str=${searchText.replace(
+      `${import.meta.env.VITE_BASEURL}/restaurants/search/v3?lat=${lat}&lng=${lng}&str=${searchText.replace(
         " ",
         "+"
       )}&trackingId=undefined&submitAction=ENTER&queryUniqueId=9444189e-a5f4-1ef3-fc6f-0f174a906659&selectedPLTab=RESTAURANT`
@@ -126,7 +126,7 @@ function SearchRestaurantSection({ data }) {
                 <Link key={index}>
                   <div
                     className="bg-white p-3 flex items-center space-x-4"
-                    key={index}
+                    key={restaurant?.info?.id}
                   >
                     <div className="relative w-[100px] h-[100px] rounded-lg overflow-hidden">
                       <img

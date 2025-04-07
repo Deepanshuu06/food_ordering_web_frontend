@@ -1,7 +1,7 @@
 import React from "react";
 
 function UnServiceableLocation({ data }) {
-  console.log(data);
+
 
   return (
     <div className="w-full h-full justify-center flex flex-col items-center mt-20 gap-8">

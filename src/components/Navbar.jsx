@@ -111,8 +111,6 @@ function Navbar() {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    console.log("Login data:", loginData);
-
     dispatch(changeLoginToggle(false));
   };
 
@@ -428,7 +426,7 @@ function Navbar() {
           </div>
           <div className="lg:hidden md:hidden">
             <i
-              class="fi fi-bs-menu-burger text-2xl"
+              className="fi fi-bs-menu-burger text-2xl"
               onClick={() => dispatch(changeNavToggle(true))}
             ></i>
           </div>
