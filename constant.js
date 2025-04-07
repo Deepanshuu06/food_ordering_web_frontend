@@ -3,7 +3,7 @@
 
 
 
-export const NAVBAR_LOGO_PNG = 'https://static.vecteezy.com/system/resources/previews/050/816/833/non_2x/swiggy-transparent-icon-free-png.png';
+export const NAVBAR_LOGO_PNG = 'https://img.freepik.com/premium-vector/food-zone-logo-restaurant_851538-48.jpg';
 export const RESTAURANTS_API = `${import.meta.env.VITE_BASEURL}/restaurants/list/v5?lat=22.7496812&lng=75.8913294&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING`;
 export const RESTAURANTS_MENU_API = `${import.meta.env.VITE_BASEURL}/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=22.7496812&lng=75.8913294&restaurantId=`
 export const HERO_SECTION_CONST_IMAGE_URL = "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/"
