@@ -28,13 +28,12 @@ function SearchRestaurantSection({ data }) {
   };
 
   useEffect(() => {
-    // Fetch restaurant data when searchText changes or component mounts
     if (data.length === 0) {
       fetchRestaurantdata();
     } else {
       setIsLoading(false);
     }
-  }, [data, searchText, lat, lng]); // Dependency array
+  }, [data, searchText, lat, lng]); 
 
   return isLoading ? (
     <RestaurantsMenuShimmer />

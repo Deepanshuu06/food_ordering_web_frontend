@@ -7,11 +7,11 @@ import {
 import SearchDishSection from "./Sections/SearchDishSection";
 import SearchRestaurantSection from "./Sections/SearchRestaurantSection";
 import { changeSearchText } from "./utils/slices/searchTextSlice";
-import RestaurantsMenuShimmer from "./Shimmers/RestaurantsMenuShimmer";
+
 
 function SearchPage() {
   const { lat, lng } = useSelector((state) => state.location);
-  const [recentSearchData, setRecentSearchData] = useState();
+
   const [preSearchData, setPreSearchData] = useState([]);
   const [searchData, setSearchData] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -23,7 +23,7 @@ function SearchPage() {
   const [isRestaurantSectionOpen, setIsRestaurantSectionOpen] = useState(false);
   const [RestaurantData, setRestaurantData] = useState([]);
   const [DishData, setDishData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+
   const dispatch = useDispatch();
 
   async function fetchPreSearch() {
@@ -32,7 +32,7 @@ function SearchPage() {
         `https://www.swiggy.com/dapi/landing/PRE_SEARCH?lat=${lat}&lng=${lng}`
       );
       const data = await res.json();
-      setRecentSearchData(data?.data?.cards[0]?.card);
+
       setPreSearchData(data?.data?.cards[1]?.card?.card || []);
     } catch (error) {
       console.error("Error fetching pre-search data:", error);
@@ -94,12 +94,10 @@ function SearchPage() {
 
       setIsRestaurantSectionOpen(item?.type === "RESTAURANT");
       setIsDishSectionOpen(item?.type !== "RESTAURANT");
-      setIsLoading(false);
+
     } catch (error) {
       console.error("Error handling search click:", error);
-    } finally {
-      setIsLoading(false); // Stop shimmer
-    }
+    } 
   }
 
   return (
@@ -170,6 +168,7 @@ function SearchPage() {
         )}
 
         {/* Results Section Toggle */}
+
         {isSearchResultDetailsSectionOpen && (
           <div className="flex gap-4 pt-4">
             <button
@@ -198,6 +197,7 @@ function SearchPage() {
         )}
 
         {/* Results Display */}
+        {DishData.length == 0 && RestaurantData.length == 0 && isRestaurantSectionOpen  ? <h1>simmer</h1> : <></>  }
 
         {isDishSectionOpen && <SearchDishSection data={DishData} />}
         {isRestaurantSectionOpen && (
