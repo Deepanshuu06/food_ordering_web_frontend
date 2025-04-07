@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   HERO_SECTION_CONST_IMAGE_URL,
   MENU_ITEM_CONST_IMAGE_URL,
 } from "../../constant";
 import SearchDishSection from "./Sections/SearchDishSection";
 import SearchRestaurantSection from "./Sections/SearchRestaurantSection";
+import { changeSearchText } from "./utils/slices/searchTextSlice";
+import RestaurantsMenuShimmer from "./Shimmers/RestaurantsMenuShimmer";
 
 function SearchPage() {
   const { lat, lng } = useSelector((state) => state.location);
@@ -21,6 +23,8 @@ function SearchPage() {
   const [isRestaurantSectionOpen, setIsRestaurantSectionOpen] = useState(false);
   const [RestaurantData, setRestaurantData] = useState([]);
   const [DishData, setDishData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useDispatch();
 
   async function fetchPreSearch() {
     try {
@@ -66,6 +70,8 @@ function SearchPage() {
   }, [searchText, lat, lng]);
 
   async function handleSearchClick(item) {
+
+    setIsSearchResultDetailsSectionOpen(true);
     try {
       const metadata = JSON.parse(item.metadata);
       const encodedMetadata = encodeURIComponent(JSON.stringify(metadata));
@@ -84,13 +90,15 @@ function SearchPage() {
       );
       setDishData(
         data?.data?.cards[1]?.groupedCard?.cardGroupMap.DISH?.cards || []
-      ); 
+      );
 
-      setIsSearchResultDetailsSectionOpen(true);
       setIsRestaurantSectionOpen(item?.type === "RESTAURANT");
       setIsDishSectionOpen(item?.type !== "RESTAURANT");
+      setIsLoading(false);
     } catch (error) {
       console.error("Error handling search click:", error);
+    } finally {
+      setIsLoading(false); // Stop shimmer
     }
   }
 
@@ -107,8 +115,9 @@ function SearchPage() {
               setSearchText(e.target.value);
               setIsSearchResultDetailsSectionOpen(false);
               setSearchData([]);
-                setIsRestaurantSectionOpen(false)
-                setIsDishSectionOpen(false)
+              setIsRestaurantSectionOpen(false);
+              setIsDishSectionOpen(false);
+              dispatch(changeSearchText(e.target.value));
             }}
           />
         </div>
@@ -165,9 +174,7 @@ function SearchPage() {
           <div className="flex gap-4 pt-4">
             <button
               className={`p-2 px-5 rounded-2xl ${
-                isRestaurantSectionOpen
-                  ? "bg-gray-800 text-white"
-                  : "border-2"
+                isRestaurantSectionOpen ? "bg-gray-800 text-white" : "border-2"
               }`}
               onClick={() => {
                 setIsRestaurantSectionOpen(true);
@@ -192,7 +199,6 @@ function SearchPage() {
 
         {/* Results Display */}
 
-      
         {isDishSectionOpen && <SearchDishSection data={DishData} />}
         {isRestaurantSectionOpen && (
           <SearchRestaurantSection data={RestaurantData} />

@@ -38,10 +38,10 @@ const { email, displayName, photoURL, phoneNumber } = userCredential?.user || {}
             className="w-20 h-20 rounded-full object-cover border-2 border-blue-500"
           />
           <div >
-          <h1 className="text-2xl font-semibold text-gray-800">
+          <h1 className="lg:text-2xl font-semibold text-gray-800">
             {displayName || ""}
           </h1>
-          <h1 className="text-lg font-semibold text-gray-800">
+          <h1 className="lg:text-lg text-xs font-semibold text-gray-800">
             {email || ""}
           </h1>
           </div>

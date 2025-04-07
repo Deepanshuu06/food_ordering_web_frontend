@@ -93,14 +93,14 @@ function RestaurantMenuItemCard({ card, restaurantDetails }) {
                       )}
                     </div>
 
-                    <h2 className="text-lg font-semibold text-gray-800 mb-1">
+                    <h2 className=" lg:text-2xl font-semibold text-gray-800 mb-1">
                       {info?.name}
                     </h2>
 
                     {/* Mobile version */}
                     <p
                       className={`text-gray-600 text-sm mb-3 lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-                        !isDiscriptionExpanded ? "line-clamp-3" : ""
+                        !isDiscriptionExpanded ? "line-clamp-1" : ""
                       }`}
                     >
                       {info?.description}
@@ -131,18 +131,25 @@ function RestaurantMenuItemCard({ card, restaurantDetails }) {
                         )}
                       </span>
                       {info?.offerTags?.[0] && (
-                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                        <span className="text-xs hidden lg:block bg-green-100 text-green-800 px-2 py-1 rounded">
                           {info.offerTags[0].title} -{" "}
                           {info.offerTags[0].subTitle}
                         </span>
                       )}
                     </div>
+
                     <div>
-                      {info?.ratings?.aggregatedRating?.rating ? <h1 className="text-xs"> 
-                       <span className="text-emerald-800" > {info?.ratings?.aggregatedRating?.rating}</span> -
-                        {info?.ratings?.aggregatedRating?.ratingCount}
-                      </h1> : <></> }
-                      
+                      {info?.ratings?.aggregatedRating?.rating ? (
+                        <h1 className="text-xs">
+                          <span className="text-emerald-800">
+                            {" "}
+                            {info?.ratings?.aggregatedRating?.rating}
+                          </span>{" "}
+                          -{info?.ratings?.aggregatedRating?.ratingCount}
+                        </h1>
+                      ) : (
+                        <></>
+                      )}
                     </div>
                   </div>
 

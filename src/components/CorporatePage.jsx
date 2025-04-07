@@ -31,7 +31,7 @@ function CorporatePage() {
 
 
   return (
-    <div className="font-sans w-[80%] mx-auto text-gray-800">
+    <div className="font-sans w-[98%] lg:w-[80%] mx-auto text-gray-800">
       {/* Hero Section */}
       <section className="relative h-96 bg-white text-black">
         <div className="flex items-center justify-center h-full px-4">

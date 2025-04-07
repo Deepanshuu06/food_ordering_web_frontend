@@ -2,7 +2,7 @@ import React from "react";
 import { HERO_SECTION_CONST_IMAGE_URL } from "../../constant";
 import { Link } from "react-router";
 
-function RestaurantCard({ data }) {
+function RestaurantCard({ data, cardDimensions }) {
   const cuisines = data?.info?.cuisines || [];
   const discount = data?.info?.aggregatedDiscountInfoV3 || "";
   const ImageId = data?.info?.cloudinaryImageId || "";
@@ -10,7 +10,14 @@ function RestaurantCard({ data }) {
 
   return (
     <Link to={`/restaurantmenu/${ctaLink.split("/")[5]}`}>
-      <div className="h-72 w-64 lg:w-60 bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-95 pb-3 ">
+      <div
+        className={
+          "lg:w-60 h-72 bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-95 pb-3 " +
+          (cardDimensions
+            ? `w-${cardDimensions?.smCardWidth} h-${cardDimensions?.smCardHeight}`
+            : "w-64 h-72")
+        }
+      >
         <div className="relative w-full h-40">
           <img
             className="w-full h-40 object-cover rounded-b-2xl"

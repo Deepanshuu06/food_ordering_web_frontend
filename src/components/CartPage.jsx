@@ -64,7 +64,7 @@ function CartPage() {
 
   return (
     <div className="w-full mx-auto bg-slate-100 pt-10 min-h-screen">
-      <div className="w-[90%] mx-auto flex flex-col lg:flex-row gap-8">
+      <div className="w-[98%] lg:w-[80%] mx-auto flex flex-col lg:flex-row gap-8">
         {/* Left Section */}
         <div className="w-full lg:w-[70%] flex flex-col gap-8">
           {/* Login Section */}
@@ -183,7 +183,7 @@ function CartPage() {
               <img
                 src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_147,h_140/Image-login_btpq7r"
                 alt="Account"
-                className="w-32 h-32 object-cover ml-4"
+                className="w-32 h-32 object-cover ml-4 hidden lg:block md:block"
               />
             </div>
           )}

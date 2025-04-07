@@ -55,9 +55,16 @@ function AllRestaurantSection({ data, title }) {
           </button>
         ))}
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 gap-3 mt-5  ">
+
+
+
+      <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 lg:gap-3  gap-7 mt-5  ">
         {allRestaurantList.map((restaurant) => (
-          <RestaurantCard data={restaurant} key={restaurant?.info?.id} />
+          <RestaurantCard data={restaurant} key={restaurant?.info?.id} cardDimensions={{
+            smCardWidth: 72,
+            smCardHight : 80
+
+          }} />
         ))}
       </div>
     </div>

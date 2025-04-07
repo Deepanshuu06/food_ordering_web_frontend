@@ -39,7 +39,7 @@ function OffersPage() {
     : offers.filter(offer => offer.category === activeCategory);
 
   return (
-    <div className="min-h-screen bg-white text-gray-800 w-[80%] mx-auto">
+    <div className="min-h-screen bg-white text-gray-800 w-[98%] lg:w-[80%] mx-auto">
       <div className="text-center py-16">
         <h1 className="text-4xl font-bold mb-4">Daily Offers & Deals</h1>
         <p className="text-lg text-gray-600 mb-6">Save big on your favorite meals!</p>

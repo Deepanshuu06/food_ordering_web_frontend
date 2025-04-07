@@ -6,13 +6,16 @@ import { setCoordinates } from "./utils/slices/locationSlice";
 import {
   changeLocationToggle,
   changeLoginToggle,
+  changeNavToggle,
 } from "./utils/slices/toggleSlice";
 import { auth, provider, signInWithPopup } from "../config/FireBaseAuth";
 import { addUserData } from "./utils/slices/authSlice";
 
 function Navbar() {
   const dispatch = useDispatch();
-  const { locationToggle, loginToggle } = useSelector((state) => state.toggle);
+  const { locationToggle, loginToggle, navToggle } = useSelector(
+    (state) => state.toggle
+  );
   const [locationName, setLocationName] = useState("");
   const [locationSearchText, setLocationSearchText] = useState("");
   const [locationSearchResult, setLocationSearchResult] = useState([]);
@@ -40,7 +43,8 @@ function Navbar() {
     {
       name: "Sign In",
       icon: <i className="fi fi-rr-user"></i>,
-      onClick: () => dispatch(changeLoginToggle(true)),
+     
+      onClick: () => dispatch(changeLoginToggle(true) ,  dispatch(changeNavToggle(false)) ),
     },
     {
       name: "Cart",
@@ -113,15 +117,15 @@ function Navbar() {
   };
 
   const handleauth = async () => {
-    let data = await signInWithPopup(auth, provider);    
+    let data = await signInWithPopup(auth, provider);
     const userdata = data;
     dispatch(addUserData(userdata));
   };
 
-  if(userCredential){
-    dispatch(changeLoginToggle(false))
+  if (userCredential) {
+    dispatch(changeLoginToggle(false));
   }
-  const { email, displayName, photoURL, phoneNumber } = userCredential?.user || {};
+  const { displayName } = userCredential?.user || {};
 
   return (
     <div>
@@ -290,6 +294,78 @@ function Navbar() {
         </div>
       </div>
 
+      {/* Mobile Version Menu */}
+      <div
+        className={`fixed inset-0 z-50 transition-all duration-300 flex lg:hidden  ${
+          navToggle
+            ? "opacity-100 visible pointer-events-auto"
+            : "opacity-0 invisible pointer-events-none"
+        }`}
+      >
+        <div
+          className="absolute inset-0 bg-black/40 transition-opacity duration-300"
+          onClick={() => dispatch(changeNavToggle(false))}
+        ></div>
+
+        <div
+          className={`absolute w-full lg:w-[40%] h-full bg-white p-6 shadow-lg z-50 transition-transform duration-500 ease-in-out ${
+            navToggle ? "translate-x-0" : "translate-x-full"
+          }`}
+          style={{ right: 0 }}
+        >
+          <div className="flex flex-col gap-6">
+            <button
+              onClick={() => dispatch(changeNavToggle(false))}
+              className="self-end bg-red-500 w-10 text-white px-2 py-2 rounded hover:bg-red-600 transition-colors"
+            >
+              X
+            </button>
+
+            <h2 className="text-2xl font-bold text-center">Navigation</h2>
+
+            {navItems.map((item) =>
+              item.link ? (
+                <Link
+                  key={item.name}
+                  to={item.link}
+                  className="flex items-center gap-2 text-gray-600 hover:text-orange-500 transition-colors"
+                >
+                  {item.icon}
+                  <span
+                    className="text-sm font-medium "
+                    onClick={() => dispatch(changeNavToggle(false))}
+                  >
+                    {item.name}
+                  </span>
+                </Link>
+              ) : userCredential ? (
+                <Link to={"/my-account"}>
+                  <button className="flex items-center gap-2 text-gray-600 hover:text-orange-500 transition-colors cursor-pointer">
+                    {item.icon}
+                    <span
+                      className="text-sm font-medium"
+                      onClick={() => dispatch(changeNavToggle(false))}
+                    >
+                      {displayName}
+                    </span>
+                  </button>
+                </Link>
+              ) : (
+                <button
+                  key={item.name}
+     
+                  onClick={item.onClick }
+                  className="flex items-center gap-2 text-gray-600 hover:text-orange-500 transition-colors cursor-pointer"
+                >
+                  {item.icon}
+                  <span className="text-sm font-medium">{item.name}</span>
+                </button>
+              )
+            )}
+          </div>
+        </div>
+      </div>
+
       {/* Main Navbar */}
       <div className="w-full shadow-md h-16 flex items-center justify-center fixed top-0 bg-white z-30">
         <div className="w-[95%] flex justify-between items-center">
@@ -312,7 +388,7 @@ function Navbar() {
             </div>
           </div>
 
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden lg:flex md:flex items-center gap-8">
             {navItems.map((item) =>
               item.link ? (
                 <Link
@@ -321,15 +397,13 @@ function Navbar() {
                   className="flex items-center gap-2 text-gray-600 hover:text-orange-500 transition-colors"
                 >
                   {item.icon}
-                  <span className="text-sm font-medium">{item.name}</span>
+                  <span className="text-sm font-medium ">{item.name}</span>
                 </Link>
               ) : userCredential ? (
                 <Link to={"/my-account"}>
                   <button className="flex items-center gap-2 text-gray-600 hover:text-orange-500 transition-colors cursor-pointer">
                     {item.icon}
-                    <span className="text-sm font-medium">
-                      {displayName  }
-                    </span>
+                    <span className="text-sm font-medium">{displayName}</span>
                   </button>
                 </Link>
               ) : (
@@ -351,6 +425,12 @@ function Navbar() {
                 ₹{Math.ceil(totalprice / 100)}
               </span>
             </div>
+          </div>
+          <div className="lg:hidden md:hidden">
+            <i
+              class="fi fi-bs-menu-burger text-2xl"
+              onClick={() => dispatch(changeNavToggle(true))}
+            ></i>
           </div>
         </div>
       </div>
