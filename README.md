@@ -1,6 +1,10 @@
 # Food Ordering App - Frontend
 
-This is the frontend of a food ordering application built using React. The app allows users to explore various restaurants, add items to their cart, place orders, and more. The project integrates with the **Swiggy API** to fetch restaurant data and display it in a user-friendly interface.
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=flat&logo=vercel)](https://food-zone-mauve.vercel.app/)
+
+This is the frontend of a food ordering application built using React. The app allows users to explore various restaurants, add items to their cart, place orders, and more. The project integrates with the **Swiggy API** to fetch restaurant data and display it in a user-friendly interface.  
+
+**Live Demo:** [https://food-zone-mauve.vercel.app/](https://food-zone-mauve.vercel.app/)
 
 ## Features
 
@@ -16,9 +20,10 @@ This is the frontend of a food ordering application built using React. The app a
 ## Tech Stack
 
 - **Frontend**: React.js, React Router
-- **API Integration**: Swiggy API for fetching restaurant and menu data
-- **State Management**: React Context API (or Redux for larger state management, depending on the size of your app)
-- **Styling**: CSS/SCSS, Material-UI, or TailwindCSS (if used)
+- **API Integration**: Swiggy API
+- **State Management**: React Context API
+- **Styling**: Tailwind CSS
+- **Deployment**: Vercel
 
 ## Getting Started
 
@@ -29,11 +34,38 @@ Ensure that you have the following installed:
 - Node.js (>= 14.x)
 - npm or yarn (npm comes with Node.js)
 
-### Install Dependencies
-
-To get started with the project:
+### Installation
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/food-ordering-app.git
+   git clone https://github.com/Deepanshuu06/food_ordering_web_frontend.git
    cd food-ordering-app
+
+Install dependencies:
+
+
+npm install
+Start the development server:
+
+
+npm start
+Open your browser and visit:
+
+
+http://localhost:3000
+
+The app is deployed on Vercel.
+Live URL: https://food-zone-mauve.vercel.app/
+
+Contributing
+Contributions are welcome! Follow these steps:
+
+Fork the repository.
+
+Create a feature branch: git checkout -b feature/your-feature
+
+Commit changes: git commit -m "Add your feature"
+
+Push to the branch: git push origin feature/your-feature
+
+Submit a pull request.

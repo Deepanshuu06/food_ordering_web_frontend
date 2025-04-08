@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RestaurantCard from "./RestaurantCard";
 import { useDispatch } from "react-redux";
 import { setFilterVal } from "./utils/slices/filterSlice";
@@ -32,7 +32,16 @@ function AllRestaurantSection({ data, title }) {
       prevActive === filterName ? null : filterName
     );
   };
-  dispatch(setFilterVal(activeButton))
+  dispatch(setFilterVal(activeButton))  
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div className="mt-8">

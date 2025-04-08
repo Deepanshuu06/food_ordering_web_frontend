@@ -38,7 +38,7 @@ function RestaurantDetailsSection() {
           import.meta.env.VITE_BASEURL
         }/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=${lat}&lng=${lng}&restaurantId=${
           restaurantId.match(/rest(\d+)$/)[1]
-        }`;
+        }&submitAction=ENTER`;
 
     isMobile ? console.log("mob api called") : console.log("web api called");
 
