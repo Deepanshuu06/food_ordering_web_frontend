@@ -11,6 +11,10 @@ function SearchRestaurantSection({ data }) {
   const { searchText } = useSelector((state) => state.searchText);
   const [resData, setResData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const resCtaLink = data[0]?.card?.card?.ctaWithParams || {};
+
+  console.log(resCtaLink);
+  
 
   const fetchRestaurantdata = async () => {
     const response = await fetch(
@@ -41,8 +45,10 @@ function SearchRestaurantSection({ data }) {
     <div className="w-full p-3 mt-4">
       <div>
         {data.length > 0 ? (
-          <div className="grid grid-cols-2">
-            <div className="bg-white p-3 flex items-center space-x-4">
+          <Link to={`/restaurantmenu/${resCtaLink?.params?.restaurant_id}`}>
+          <div className="grid grid-cols-1 lg:grid-cols-2">
+            <div className="bg-white lg:p-3 p-0 flex items-center space-x-4">
+            
               <div className="relative w-[100px] h-[100px] rounded-lg overflow-hidden">
                 <img
                   src={
@@ -68,8 +74,9 @@ function SearchRestaurantSection({ data }) {
               </div>
             </div>
           </div>
+          </Link>
         ) : (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {resData.map(
               ({
                 card: {
@@ -80,6 +87,7 @@ function SearchRestaurantSection({ data }) {
                   className="bg-white p-3 flex items-center space-x-4"
                   key={info.id}
                 >
+                  
                   <div className="relative w-[100px] h-[100px] rounded-lg overflow-hidden">
                     <img
                       src={
@@ -119,13 +127,13 @@ function SearchRestaurantSection({ data }) {
           <h1 className="py-5 text-2xl font-bold">
             {otherRestaurantData.title}
           </h1>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {otherRestaurantData.restaurants &&
             otherRestaurantData.restaurants.length > 0 ? (
               otherRestaurantData.restaurants.map((restaurant, index) => (
                 <Link key={index}>
                   <div
-                    className="bg-white p-3 flex items-center space-x-4"
+                    className="bg-white lg:p-3 p-0 flex items-center space-x-4"
                     key={restaurant?.info?.id}
                   >
                     <div className="relative w-[100px] h-[100px] rounded-lg overflow-hidden">

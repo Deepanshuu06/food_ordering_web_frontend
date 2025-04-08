@@ -23,7 +23,7 @@ function HeroSection({ data }) {
   return (
     <div>
       <div className="justify-between items-center py-5 flex ">
-        <h1 className="text-lg lg:text-2xl md:text-xl font-bold">{HeroSectionTitle}</h1>
+        <h1 className="text-lg lg:text-2xl md:text-xl px-3 lg:px-0 font-bold">{HeroSectionTitle}</h1>
         <div className="justify-between flex gap-6 items-center">
           <i
             onClick={handlePrev}

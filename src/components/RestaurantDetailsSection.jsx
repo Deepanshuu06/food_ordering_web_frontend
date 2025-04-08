@@ -1,4 +1,4 @@
-import React, {  useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { RESTAURANTS_MENU_API } from "../../constant";
 import { Link, useParams } from "react-router";
 import RestaurantsMenuShimmer from "./Shimmers/RestaurantsMenuShimmer";
@@ -27,36 +27,63 @@ function RestaurantDetailsSection() {
   const [selectedOffer, setSelectedOffer] = useState(null);
   const { differentRestaurantPopUp } = useSelector((state) => state.toggle);
   const dispatch = useDispatch();
+  const isMobile = window.innerWidth <= 768; // Detect mobile devices
 
   async function fetchdata() {
-    const data = await fetch(
-      RESTAURANTS_MENU_API + restaurantId.match(/rest(\d+)$/)[1]
-    );
-    const response = await data.json();
+    const apiUrl = isMobile
+      ? `https://www.swiggy.com/mapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=${lat}&lng=${lng}&restaurantId=${
+          restaurantId.match(/rest(\d+)$/)[1]
+        }&submitAction=ENTER`
+      : `${
+          import.meta.env.VITE_BASEURL
+        }/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=${lat}&lng=${lng}&restaurantId=${
+          restaurantId.match(/rest(\d+)$/)[1]
+        }`;
 
-    setRestaurantDetails(response?.data?.cards[2]?.card?.card?.info);
-    setOffers(
-      response?.data?.cards[3]?.card?.card?.gridElements?.infoWithStyle?.offers
-    );
-    // setMenuData(
-    //   response?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards
-    // );
-    // setTopPicksItem(
-    //   (
-    //     data?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards ?? []
-    //   ).filter((item) => item?.card?.card?.title === "Top Picks")
-    // );
+    isMobile ? console.log("mob api called") : console.log("web api called");
 
-    setActualMenuData(
-      (
-        response?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards ??
-        []
-      ).filter(
-        (data) => data?.card?.card?.itemCards || data?.card?.card?.categories
-      )
-    );
+    try {
+      const data = await fetch(apiUrl);
+      const response = await data.json();
 
-    setIsLoading(false);
+      setRestaurantDetails(response?.data?.cards[2]?.card?.card?.info);
+      setOffers(
+        response?.data?.cards[3]?.card?.card?.gridElements?.infoWithStyle
+          ?.offers
+      );
+      // setMenuData(
+      //   response?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards
+      // );
+      // setTopPicksItem(
+      //   (
+      //     data?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards ?? []
+      //   ).filter((item) => item?.card?.card?.title === "Top Picks")
+      // );
+
+      isMobile
+        ? setActualMenuData(
+            (
+              response?.data?.cards[5]?.groupedCard?.cardGroupMap?.REGULAR
+                ?.cards ?? []
+            ).filter(
+              (data) =>
+                data?.card?.card?.itemCards || data?.card?.card?.categories
+            )
+          )
+        : setActualMenuData(
+            (
+              response?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR
+                ?.cards ?? []
+            ).filter(
+              (data) =>
+                data?.card?.card?.itemCards || data?.card?.card?.categories
+            )
+          );
+
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   useEffect(() => {
@@ -89,7 +116,7 @@ function RestaurantDetailsSection() {
           <RestaurantsMenuShimmer />
         ) : (
           <div className="relative w-full ">
-            <div >
+            <div>
               {differentRestaurantPopUp && (
                 <div className="flex justify-center items-center">
                   <div className=" h-[30%] w-[90%] lg:h-[30%] lg:w-[40%] z-30 fixed bottom-3 bg-white p-8 rounded-lg shadow-2xl shadow-black space-y-1 gap-5 flex flex-col">
@@ -106,7 +133,9 @@ function RestaurantDetailsSection() {
                     <div className="flex justify-center space-x-4">
                       <button
                         className="px-2 lg:px-6 lg:py-2 py-1 bg-white text-emerald-600 w-[50%] border-2 border-green-800 text-xs  font-semibold transition duration-300 hover:bg-gray-100"
-                        onClick={() => dispatch(toggleDifferentRestaurantPopUp())}
+                        onClick={() =>
+                          dispatch(toggleDifferentRestaurantPopUp())
+                        }
                       >
                         NO
                       </button>
@@ -115,7 +144,7 @@ function RestaurantDetailsSection() {
                         onClick={() => {
                           dispatch(clearCart());
                           toast.success("Cart cleared, now you can add items");
-                          dispatch(toggleDifferentRestaurantPopUp())
+                          dispatch(toggleDifferentRestaurantPopUp());
                         }}
                       >
                         YES, START AFRESH
@@ -238,7 +267,7 @@ function RestaurantDetailsSection() {
 
             {/* Menu Section */}
             <div className="pt-5">
-              {actualMenuData.map(({ card: { card } } , index) => (
+              {actualMenuData.map(({ card: { card } }, index) => (
                 <MenuSection
                   card={card}
                   restaurantDetails={restaurantDetails}

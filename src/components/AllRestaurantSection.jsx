@@ -8,6 +8,9 @@ function AllRestaurantSection({ data, title }) {
     data?.gridElements?.infoWithStyle?.restaurants || [];
   const [activeButton, setActivebutton] = useState(null);
   const dispatch = useDispatch()
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    const cardWidth = windowWidth < 768 ? windowWidth * 0.95 : 250; 
+    const cardHeight = windowWidth < 768 ? 380 : 300; 
 
   const filterOptions = [
     {
@@ -60,11 +63,12 @@ function AllRestaurantSection({ data, title }) {
 
       <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 lg:gap-3  gap-7 mt-5  ">
         {allRestaurantList.map((restaurant) => (
-          <RestaurantCard data={restaurant} key={restaurant?.info?.id} cardDimensions={{
-            smCardWidth: 72,
-            smCardHight : 80
-
-          }} />
+          <RestaurantCard data={restaurant} key={restaurant?.info?.id} 
+          cardDimensions={{
+            smCardWidth: `${cardWidth}px`, // Adjust width
+            smCardHeight: `${cardHeight}px`, // Adjust height
+          }}
+          />
         ))}
       </div>
     </div>

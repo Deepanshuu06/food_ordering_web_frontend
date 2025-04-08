@@ -18,12 +18,9 @@ function MyAccount() {
     navigate("/")
   };
 
+  console.log(userCredential);
   
-const { email, displayName, photoURL, phoneNumber } = userCredential?.user || {};
-
-
-
-
+const { email, displayName, photoURL } = userCredential?.user || {};
 
   
 

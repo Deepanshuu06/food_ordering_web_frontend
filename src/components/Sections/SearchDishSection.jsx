@@ -32,7 +32,7 @@ function SearchDishSection({ data }) {
     <div className="w-full bg-slate-100">
       <div className="py-4 px-3"></div>
       {acctualDishData.length > 0 ? (
-        <div className="w-full grid grid-cols-2 gap-2 p-3">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-2 p-1 lg:p-3">
           {acctualDishData.map(({ card: { card } }) => (
             <div className="bg-white px-9 py-5 flex items-center justify-between rounded-2xl"
             key={card?.info?.id}
@@ -53,7 +53,7 @@ function SearchDishSection({ data }) {
                     className="object-cover w-full h-full rounded-xl"
                   />
                 </div>
-                <button className="px-7 py-2 border-2 rounded-2xl text-green-600 cursor-pointer">
+                <button className="px-7 lg:px-2 border-2 rounded-2xl text-green-600 cursor-pointer">
                   ADD
                 </button>
               </div>
@@ -61,7 +61,7 @@ function SearchDishSection({ data }) {
           ))}
         </div>
       ) : (
-        <div className="w-full grid grid-cols-2 gap-2 p-3">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-2 p-1 lg:p-3">
           {dishesList?.map(({ card: { card } }) => (
             <div className="bg-white px-9 py-5 flex items-center justify-between rounded-2xl"
             key={card?.info?.id}
@@ -70,7 +70,7 @@ function SearchDishSection({ data }) {
                 <h1 className="">{card?.info?.isVeg ? "Veg" : "Non Veg"}</h1>
                 <h1 className="font-bold">{card?.info?.name}</h1>
                 <h2> ₹ {card?.info?.price / 100}</h2>
-                <button className="px-3  text-xs py-1 border-2 rounded-2xl cursor-pointer">
+                <button className="px-3 text-xs py-1 border-2 rounded-2xl cursor-pointer">
                   More details
                 </button>
               </div>

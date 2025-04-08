@@ -370,7 +370,7 @@ function Navbar() {
           <div className="flex items-center gap-4">
             <Link to="/">
               <img
-                className="w-16 lg:w-20"
+                className="w-16 lg:w-20 h-16"
                 src={NAVBAR_LOGO_PNG}
                 alt="Company Logo"
               />

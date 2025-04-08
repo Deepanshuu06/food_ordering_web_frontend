@@ -3,7 +3,8 @@ import RestaurantCard from "./RestaurantCard";
 
 function TopRestaurantSection({ data }) {
   const topRestaurantSectionTitle = data?.header?.title;
-  const topRestaurantList = data?.gridElements?.infoWithStyle?.restaurants || [];
+  const topRestaurantList =
+    data?.gridElements?.infoWithStyle?.restaurants || [];
 
   const [translateValue, setTranslateValue] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -14,11 +15,16 @@ function TopRestaurantSection({ data }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Dynamic card width based on screen size
-  const cardWidth = windowWidth < 768 ? windowWidth * 0.8 : 250;
+  // Dynamic card width and height based on screen size
+  const cardWidth = windowWidth < 768 ? windowWidth * 0.86 : 250; 
+  const cardHeight = windowWidth < 768 ? 360 : 280; 
+  
   const cardGap = 16;
   const totalCardWidth = cardWidth + cardGap;
-  const maxTranslateValue = Math.max(0, (topRestaurantList.length - 1) * totalCardWidth);
+  const maxTranslateValue = Math.max(
+    0,
+    (topRestaurantList.length - 1) * totalCardWidth
+  );
 
   function handlePrev() {
     if (translateValue > 0) {
@@ -28,7 +34,9 @@ function TopRestaurantSection({ data }) {
 
   function handleNext() {
     if (translateValue < maxTranslateValue) {
-      setTranslateValue((prev) => Math.min(maxTranslateValue, prev + totalCardWidth));
+      setTranslateValue((prev) =>
+        Math.min(maxTranslateValue, prev + totalCardWidth)
+      );
     }
   }
 
@@ -44,9 +52,7 @@ function TopRestaurantSection({ data }) {
                 translateValue === 0 ? "text-gray-400" : "text-black"
               }`}
               style={{ pointerEvents: translateValue === 0 ? "none" : "auto" }}
-            >
-
-            </i>
+            ></i>
             <i
               onClick={handleNext}
               className={`fi text-xl lg:text-2xl md:text-2xl fi-br-angle-circle-right cursor-pointer ${
@@ -54,10 +60,11 @@ function TopRestaurantSection({ data }) {
                   ? "text-gray-400"
                   : "text-black"
               }`}
-              style={{ pointerEvents: translateValue === maxTranslateValue ? "none" : "auto" }}
-            >
-
-            </i>
+              style={{
+                pointerEvents:
+                  translateValue === maxTranslateValue ? "none" : "auto",
+              }}
+            ></i>
           </div>
         </div>
       )}
@@ -67,9 +74,18 @@ function TopRestaurantSection({ data }) {
           className="flex transition-transform duration-300 gap-4"
           style={{ transform: `translateX(-${translateValue}px)` }}
         >
-          {topRestaurantList.map((restaurant , index) => (
-            <div key={restaurant.id || index} style={{ minWidth: `${cardWidth}px` }}>
-              <RestaurantCard data={restaurant} />
+          {topRestaurantList.map((restaurant, index) => (
+            <div
+              key={restaurant.id || index}
+              style={{ minWidth: `${cardWidth}px`, height: `${cardHeight}px` }} // Apply the dynamic height
+            >
+              <RestaurantCard
+                data={restaurant}
+                cardDimensions={{
+                  smCardWidth: `${cardWidth}px`, // Adjust width
+                  smCardHeight: `${cardHeight}px`, // Adjust height
+                }}
+              />
             </div>
           ))}
         </div>

@@ -11,16 +11,15 @@ function RestaurantCard({ data, cardDimensions }) {
   return (
     <Link to={`/restaurantmenu/${ctaLink.split("/")[5]}`}>
       <div
-        className={
-          "lg:w-60 h-72 bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-95 pb-3 " +
-          (cardDimensions
-            ? `w-${cardDimensions?.smCardWidth} h-${cardDimensions?.smCardHeight}`
-            : "w-64 h-72")
-        }
+        className={`bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-95 pb-3`}
+        style={{
+          width: cardDimensions?.smCardWidth || "256px", // Default to 256px
+          height: cardDimensions?.smCardHeight || "288px", // Default to 288px
+        }}
       >
-        <div className="relative w-full h-40">
+        <div className="relative w-full h-56 lg:h-40">
           <img
-            className="w-full h-40 object-cover rounded-b-2xl"
+            className="w-full h-56 lg:h-40 object-cover rounded-b-2xl"
             src={HERO_SECTION_CONST_IMAGE_URL + ImageId}
             alt="Restaurant"
           />
@@ -30,11 +29,11 @@ function RestaurantCard({ data, cardDimensions }) {
             </span>
           </div>
         </div>
-        <div className="px-2 py-1 ">
-          <h2 className="text-xl font-semibold text-gray-800">
+        <div className="px-2 py-1 flex flex-col gap-3 lg:gap-1">
+          <h2 className="text-lg font-semibold text-gray-800">
             {data?.info?.name}
           </h2>
-          <div className="flex text-gray-600 text-sm gap-4 ">
+          <div className="flex text-gray-600 text-sm gap-4">
             <h3 className="flex items-center">
               <span className="mr-1">⭐</span> {data?.info?.avgRatingString}
             </h3>

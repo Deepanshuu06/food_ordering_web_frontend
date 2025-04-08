@@ -8,7 +8,6 @@ import SearchDishSection from "./Sections/SearchDishSection";
 import SearchRestaurantSection from "./Sections/SearchRestaurantSection";
 import { changeSearchText } from "./utils/slices/searchTextSlice";
 
-
 function SearchPage() {
   const { lat, lng } = useSelector((state) => state.location);
 
@@ -29,7 +28,9 @@ function SearchPage() {
   async function fetchPreSearch() {
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_BASEURL}/landing/PRE_SEARCH?lat=${lat}&lng=${lng}`
+        `${
+          import.meta.env.VITE_BASEURL
+        }/landing/PRE_SEARCH?lat=${lat}&lng=${lng}`
       );
       const data = await res.json();
 
@@ -45,7 +46,9 @@ function SearchPage() {
   async function fetchSearch() {
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_BASEURL}/restaurants/search/suggest?lat=${lat}&lng=${lng}&str=${searchText}&trackingId=null&includeIMItem=true`
+        `${
+          import.meta.env.VITE_BASEURL
+        }/restaurants/search/suggest?lat=${lat}&lng=${lng}&str=${searchText}&trackingId=null&includeIMItem=true`
       );
       const data = await res.json();
       setSearchData(data?.data?.suggestions || []);
@@ -70,14 +73,15 @@ function SearchPage() {
   }, [searchText, lat, lng]);
 
   async function handleSearchClick(item) {
-
     setIsSearchResultDetailsSectionOpen(true);
     try {
       const metadata = JSON.parse(item.metadata);
       const encodedMetadata = encodeURIComponent(JSON.stringify(metadata));
 
       const response = await fetch(
-        `${import.meta.env.VITE_BASEURL}/restaurants/search/v3?lat=${lat}&lng=${lng}&str=${item.text.replace(
+        `${
+          import.meta.env.VITE_BASEURL
+        }/restaurants/search/v3?lat=${lat}&lng=${lng}&str=${item.text.replace(
           " ",
           "+"
         )}&trackingId=null&submitAction=SUGGESTION&queryUniqueId=b086f011-dec2-de52-81e3-5a4930d22c34&metaData=${encodedMetadata}`
@@ -94,15 +98,14 @@ function SearchPage() {
 
       setIsRestaurantSectionOpen(item?.type === "RESTAURANT");
       setIsDishSectionOpen(item?.type !== "RESTAURANT");
-
     } catch (error) {
       console.error("Error handling search click:", error);
-    } 
+    }
   }
 
   return (
-    <div className="w-full h-screen">
-      <div className="w-[70%] mx-auto h-full">
+    <div className="w-full h-full">
+      <div className="w-[90%] lg:w-[70%] mx-auto h-full">
         <div className="pt-20 sticky top-5 z-20 bg-white">
           <input
             className="bg-white w-full p-4 outline-none border-2"
@@ -197,7 +200,13 @@ function SearchPage() {
         )}
 
         {/* Results Display */}
-        {DishData.length == 0 && RestaurantData.length == 0 && isRestaurantSectionOpen  ? <h1>simmer</h1> : <></>  }
+        {DishData.length == 0 &&
+        RestaurantData.length == 0 &&
+        isRestaurantSectionOpen ? (
+          <h1>simmer</h1>
+        ) : (
+          <></>
+        )}
 
         {isDishSectionOpen && <SearchDishSection data={DishData} />}
         {isRestaurantSectionOpen && (
