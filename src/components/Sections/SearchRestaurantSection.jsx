@@ -12,17 +12,23 @@ function SearchRestaurantSection({ data }) {
   const [resData, setResData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const resCtaLink = data[0]?.card?.card?.ctaWithParams || {};
+  const isMobile = window.innerWidth <= 768;
 
-  console.log(resCtaLink);
+
   
 
   const fetchRestaurantdata = async () => {
-    const response = await fetch(
-      `${import.meta.env.VITE_BASEURL}/restaurants/search/v3?lat=${lat}&lng=${lng}&str=${searchText.replace(
-        " ",
-        "+"
-      )}&trackingId=undefined&submitAction=ENTER&queryUniqueId=9444189e-a5f4-1ef3-fc6f-0f174a906659&selectedPLTab=RESTAURANT`
-    );
+
+    const apiURL = isMobile ? `${import.meta.env.VITE_BASEURL_DESKTOP}/restaurants/search/v3?lat=${lat}&lng=${lng}&str=${searchText.replace(
+      " ",
+      "+"
+    )}&trackingId=undefined&submitAction=ENTER&queryUniqueId=9444189e-a5f4-1ef3-fc6f-0f174a906659&selectedPLTab=RESTAURANT` 
+    : `${import.meta.env.VITE_BASEURL_DESKTOP}/restaurants/search/v3?lat=${lat}&lng=${lng}&str=${searchText.replace(
+      " ",
+      "+"
+    )}&trackingId=undefined&submitAction=ENTER&queryUniqueId=9444189e-a5f4-1ef3-fc6f-0f174a906659&selectedPLTab=RESTAURANT`
+
+    const response = await fetch(apiURL);
 
     const data = await response.json();
     setResData(
@@ -52,11 +58,11 @@ function SearchRestaurantSection({ data }) {
               <div className="relative w-[100px] h-[100px] rounded-lg overflow-hidden">
                 <img
                   src={
-                    info.cloudinaryImageId
-                      ? `${MENU_ITEM_CONST_IMAGE_URL}${info.cloudinaryImageId}`
+                    info?.cloudinaryImageId
+                      ? `${MENU_ITEM_CONST_IMAGE_URL}${info?.cloudinaryImageId}`
                       : "default-image-url.jpg"
                   }
-                  alt={info.name || "Restaurant"}
+                  alt={info?.name || "Restaurant"}
                   className="w-full h-full object-cover"
                 />
                 <button className="absolute bottom-2 right-2 bg-black text-white px-2 py-1 rounded">
@@ -64,12 +70,12 @@ function SearchRestaurantSection({ data }) {
                 </button>
               </div>
               <div>
-                <h1 className="text-lg font-semibold">{info.name}</h1>
+                <h1 className="text-lg font-semibold">{info?.name}</h1>
                 <h3 className="text-gray-500 text-xs">
-                  Rating: {info.avgRatingString}
+                  Rating: {info?.avgRatingString}
                 </h3>
                 <h3 className="text-gray-700 text-xs">
-                  {info.costForTwoMessage}
+                  {info?.costForTwoMessage}
                 </h3>
               </div>
             </div>
@@ -91,7 +97,7 @@ function SearchRestaurantSection({ data }) {
                   <div className="relative w-[100px] h-[100px] rounded-lg overflow-hidden">
                     <img
                       src={
-                        info.cloudinaryImageId
+                        info?.cloudinaryImageId
                           ? `${MENU_ITEM_CONST_IMAGE_URL}${info?.cloudinaryImageId}`
                           : "default-image-url.jpg"
                       }
@@ -139,7 +145,7 @@ function SearchRestaurantSection({ data }) {
                     <div className="relative w-[100px] h-[100px] rounded-lg overflow-hidden">
                       <img
                         src={
-                          restaurant?.info.cloudinaryImageId
+                          restaurant?.info?.cloudinaryImageId
                             ? `${MENU_ITEM_CONST_IMAGE_URL}${restaurant?.info?.cloudinaryImageId}`
                             : "default-image-url.jpg"
                         }

@@ -19,9 +19,9 @@ function Body() {
 
   async function fetchData() {
     const apiUrl = isMobile
-      ? `https://www.swiggy.com/mapi/restaurants/list/v5?offset=0&is-seo-homepage-enabled=true&lat=${lat}&lng=${lng}&carousel=true&third_party_vendor=1`
+      ? `${import.meta.env.VITE_BASEURL_MOBILE}/restaurants/list/v5?offset=0&is-seo-homepage-enabled=true&lat=${lat}&lng=${lng}&carousel=true&third_party_vendor=1`
       : `${
-          import.meta.env.VITE_BASEURL
+          import.meta.env.VITE_BASEURL_DESKTOP
         }/restaurants/list/v5?lat=${lat}&lng=${lng}&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING`;
 
     try {

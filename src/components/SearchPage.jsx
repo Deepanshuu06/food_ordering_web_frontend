@@ -29,7 +29,7 @@ function SearchPage() {
     try {
       const res = await fetch(
         `${
-          import.meta.env.VITE_BASEURL
+          import.meta.env.VITE_BASEURL_DESKTOP
         }/landing/PRE_SEARCH?lat=${lat}&lng=${lng}`
       );
       const data = await res.json();
@@ -47,7 +47,7 @@ function SearchPage() {
     try {
       const res = await fetch(
         `${
-          import.meta.env.VITE_BASEURL
+          import.meta.env.VITE_BASEURL_DESKTOP
         }/restaurants/search/suggest?lat=${lat}&lng=${lng}&str=${searchText}&trackingId=null&includeIMItem=true`
       );
       const data = await res.json();
@@ -80,7 +80,7 @@ function SearchPage() {
 
       const response = await fetch(
         `${
-          import.meta.env.VITE_BASEURL
+          import.meta.env.VITE_BASEURL_DESKTOP
         }/restaurants/search/v3?lat=${lat}&lng=${lng}&str=${item.text.replace(
           " ",
           "+"
@@ -173,7 +173,7 @@ function SearchPage() {
         {/* Results Section Toggle */}
 
         {isSearchResultDetailsSectionOpen && (
-          <div className="flex gap-4 pt-4">
+          <div className="flex gap-4 pt-4 sticky top-40 bg-white py-4 z-20">
             <button
               className={`p-2 px-5 rounded-2xl ${
                 isRestaurantSectionOpen ? "bg-gray-800 text-white" : "border-2"

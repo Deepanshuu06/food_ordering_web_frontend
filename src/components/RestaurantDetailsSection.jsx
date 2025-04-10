@@ -31,11 +31,13 @@ function RestaurantDetailsSection() {
 
   async function fetchdata() {
     const apiUrl = isMobile
-      ? `https://www.swiggy.com/mapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=${lat}&lng=${lng}&restaurantId=${
+      ? `${
+          import.meta.env.VITE_BASEURL_MOBILE
+        }/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=${lat}&lng=${lng}&restaurantId=${
           restaurantId.match(/rest(\d+)$/)[1]
         }&submitAction=ENTER`
       : `${
-          import.meta.env.VITE_BASEURL
+          import.meta.env.VITE_BASEURL_DESKTOP
         }/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=${lat}&lng=${lng}&restaurantId=${
           restaurantId.match(/rest(\d+)$/)[1]
         }&submitAction=ENTER`;
@@ -111,7 +113,7 @@ function RestaurantDetailsSection() {
 
   return (
     <div className="w-full mx-auto">
-      <div className="w-[95%] lg:w-[60%] md:[75%] mx-auto">
+      <div className="w-[95%] lg:w-[60%] md:w-[75%] mx-auto">
         {isLoading ? (
           <RestaurantsMenuShimmer />
         ) : (
@@ -265,6 +267,8 @@ function RestaurantDetailsSection() {
               </div>
             </Link>
 
+           
+
             {/* Menu Section */}
             <div className="pt-5">
               {actualMenuData.map(({ card: { card } }, index) => (
@@ -274,6 +278,10 @@ function RestaurantDetailsSection() {
                   key={card?.info?.id || index}
                 />
               ))}
+            </div>
+            
+            <div className="w-full w bg-black h-16 fixed bottom-0 mx-auto">
+fsd
             </div>
           </div>
         )}
