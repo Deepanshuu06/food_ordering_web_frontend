@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { RESTAURANTS_MENU_API } from "../../constant";
+
 import { Link, useParams } from "react-router";
 import RestaurantsMenuShimmer from "./Shimmers/RestaurantsMenuShimmer";
 import OffersCard from "./cards/OffersCard";
@@ -10,9 +10,13 @@ import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { clearCart } from "./utils/slices/cartSlice";
 import { toggleDifferentRestaurantPopUp } from "./utils/slices/toggleSlice";
+  // Removed from top level, will be moved inside the component
 
 function RestaurantDetailsSection() {
   const { lng, lat } = useSelector((state) => state.location);
+  const { items } = useSelector((state) => state.cart); 
+  console.log(items);
+  
   const navigate = useNavigate();
   const params = useParams();
   const restaurantId = params?.id;
@@ -42,7 +46,6 @@ function RestaurantDetailsSection() {
           restaurantId.match(/rest(\d+)$/)[1]
         }&submitAction=ENTER`;
 
-    isMobile ? console.log("mob api called") : console.log("web api called");
 
     try {
       const data = await fetch(apiUrl);
@@ -267,8 +270,6 @@ function RestaurantDetailsSection() {
               </div>
             </Link>
 
-           
-
             {/* Menu Section */}
             <div className="pt-5">
               {actualMenuData.map(({ card: { card } }, index) => (
@@ -279,12 +280,15 @@ function RestaurantDetailsSection() {
                 />
               ))}
             </div>
-            
-            <div className="w-full w bg-black h-16 fixed bottom-0 mx-auto">
-fsd
-            </div>
+
+           
+
           </div>
         )}
+         {items.length > 0 && <div className=" w-[95%] lg:w-[60%] md:w-[75%] bg-emerald-500 h-16 fixed bottom-0 flex items-center justify-between px-3">
+              <h1 className="text-white font-bold">{items.length} item added</h1>
+             <Link to={"/cart"}> <button className="text-white font-bold px-4 cursor-pointer py-3" >VIEW CART</button></Link>
+            </div>}
       </div>
     </div>
   );

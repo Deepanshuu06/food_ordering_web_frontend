@@ -68,6 +68,7 @@ function Body() {
                 data={allRestaurant}
                 title={data?.data?.cards[2]?.card?.card}
               />
+               
             </>
           )}
         </div>

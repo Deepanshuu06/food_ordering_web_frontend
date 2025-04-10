@@ -6,32 +6,28 @@ import {
   increaseQuantity,
   setResInfo,
 } from "../utils/slices/cartSlice";
-import toast, { Toaster } from "react-hot-toast";
-
+import toast from "react-hot-toast";
 import { toggleDifferentRestaurantPopUp } from "../utils/slices/toggleSlice";
 
 function RestaurantMenuItemCard({ card, restaurantDetails }) {
-  const [isMenuItemCardOpen, setIsMenuItemCardOpen] = useState(true);
-  const [isDiscriptionExpanded, setIsDiscriptionExpanded] = useState(false);
-
+  const [isMenuItemCardOpen, setIsMenuItemCardOpen] = useState(false);
+  const [expandedDescriptions, setExpandedDescriptions] = useState({});
 
   const dispatch = useDispatch();
   const { items, resInfo } = useSelector((state) => state.cart);
 
-
-
-  function handleisMenuItemCardOpen() {
+  const handleisMenuItemCardOpen = () => {
     setIsMenuItemCardOpen(!isMenuItemCardOpen);
-  }
-  function toggleDiscription() {
-    setIsDiscriptionExpanded(!isDiscriptionExpanded);
-  }
+  };
+
+  const toggleDescription = (itemId) => {
+    setExpandedDescriptions((prev) => ({
+      ...prev,
+      [itemId]: !prev[itemId],
+    }));
+  };
 
   const handleAddToCart = (info) => {
-    // if (!info?.id) {
-    //   toast.error("Invalid item.");
-    //   return;
-    // }
     const foundItem = items.find((item) => item.id === info?.id);
 
     if (foundItem) {
@@ -44,7 +40,6 @@ function RestaurantMenuItemCard({ card, restaurantDetails }) {
         dispatch(addToCart({ ...info, itemQuantity: 1 }));
         dispatch(setResInfo(restaurantDetails));
         toast.success(`${info.name} added to cart.`, { duration: 1000 });
-
       } else {
         dispatch(toggleDifferentRestaurantPopUp());
       }
@@ -56,7 +51,7 @@ function RestaurantMenuItemCard({ card, restaurantDetails }) {
       <div>
         <div className="border-b-5 border-slate-200 mt-6">
           <div
-            className="flex justify-between items-center  bg-white py-4 px-4 cursor-pointer hover:bg-gray-100 transition-colors"
+            className="flex justify-between items-center bg-white py-4 px-4 cursor-pointer hover:bg-gray-100 transition-colors"
             onClick={handleisMenuItemCardOpen}
           >
             <h1 className="text-lg text-gray-950">
@@ -74,16 +69,15 @@ function RestaurantMenuItemCard({ card, restaurantDetails }) {
             </span>
           </div>
 
-          <div className="px-4 ">
+          <div className="px-4">
             {isMenuItemCardOpen &&
-              card?.itemCards?.map(({ card: { info } } , index) => (
+              card?.itemCards?.map(({ card: { info } }, index) => (
                 <div
                   key={info?.id || index}
                   className="flex flex-row justify-between py-6 border-t border-gray-200 duration-1000"
                 >
-                  {/* Text Content */}
-
-                  <div className="md:pr-8 flex-1">
+                  {/* Text Section */}
+                  <div className="md:pr-8 flex flex-col w-[80%] pr-4">
                     <div className="mb-2">
                       {info?.itemAttribute?.vegClassifier === "VEG" ? (
                         <span className="text-green-600">🟢</span>
@@ -92,33 +86,28 @@ function RestaurantMenuItemCard({ card, restaurantDetails }) {
                       )}
                     </div>
 
-                    <h2 className=" lg:text-2xl font-semibold text-gray-800 mb-1">
+                    <h2 className="lg:text-2xl font-semibold text-gray-800 mb-1">
                       {info?.name}
                     </h2>
 
-                    {/* Mobile version */}
                     <p
-                      className={`text-gray-600 text-sm mb-3 lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-                        !isDiscriptionExpanded ? "line-clamp-1" : ""
+                      className={`text-gray-600 text-sm mb-3 overflow-hidden transition-all duration-300 ease-in-out ${
+                        !expandedDescriptions[info.id] ? "line-clamp-2" : ""
                       }`}
                     >
                       {info?.description}
                     </p>
 
-                    {/* Show More button on mobile */}
-                    <div className="lg:hidden">
-                      <button
-                        onClick={toggleDiscription}
-                        className="text-blue-500 text-sm "
+                    <div>
+                      {info?.description?.length > 10 ? <button
+                        onClick={() => toggleDescription(info.id)}
+                        className="text-black text-sm"
                       >
-                        {isDiscriptionExpanded ? "Show Less" : "Show More"}
-                      </button>
+                        {expandedDescriptions[info.id]
+                          ? "Show Less"
+                          : "Show More"}
+                      </button> :<></>}
                     </div>
-
-                    {/* Desktop version */}
-                    <p className="text-gray-600 text-sm mb-3 hidden lg:flex w-[90%]">
-                      {info?.description}
-                    </p>
 
                     <div className="flex items-center gap-2 mb-3">
                       <span className="font-medium text-gray-800">
@@ -141,47 +130,40 @@ function RestaurantMenuItemCard({ card, restaurantDetails }) {
                       {info?.ratings?.aggregatedRating?.rating ? (
                         <h1 className="text-xs">
                           <span className="text-emerald-800">
-                            {" "}
                             {info?.ratings?.aggregatedRating?.rating}
                           </span>{" "}
                           -{info?.ratings?.aggregatedRating?.ratingCount}
                         </h1>
-                      ) : (
-                        <></>
-                      )}
+                      ) : null}
                     </div>
                   </div>
 
-                  {/* Image */}
+                  {/* Image + Fixed Button */}
                   {info?.imageId ? (
-                    <div className="mt-4 md:mt-0 w-32 h-32 flex flex-col items-center relative">
+                    <div className="mt-4 md:mt-0 w-36 h-36 flex flex-col items-center relative">
                       <div className="relative aspect-square rounded-2xl overflow-hidden w-full">
                         <img
                           className="w-full h-full object-cover"
                           src={MENU_ITEM_CONST_IMAGE_URL + info.imageId}
                           alt={info.name}
                         />
-                        {/* Add to Cart Button */}
+                        {/* Fixed Add to Cart inside image */}
                         <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-gray-100/90 to-transparent flex items-end justify-center pb-1">
                           <button
-                            className={`bg-white border border-gray-300 text-green-600 font-semibold px-3 py-1 rounded-md hover:bg-gray-100 transition-colors text-sm shadow-sm cursor-pointer `}
-                            onClick={() => {
-                              handleAddToCart(info);
-                            }}
+                            className="bg-white border border-gray-300 text-green-600 font-semibold px-3 py-1 rounded-md hover:bg-gray-100 transition-colors text-sm shadow-sm cursor-pointer"
+                            onClick={() => handleAddToCart(info)}
                           >
-                            <h1>Add to Cart</h1>
+                            Add to Cart
                           </button>
                         </div>
                       </div>
                     </div>
                   ) : (
                     <button
-                      className={`bg-white border border-gray-300 text-green-600 font-semibold px-8  rounded-md hover:bg-gray-100 transition-colors text-sm shadow-sm cursor-pointer `}
-                      onClick={() => {
-                        handleAddToCart(info);
-                      }}
+                      className="bg-white border border-gray-300 text-green-600 font-semibold px-8 py-2 rounded-md hover:bg-gray-100 transition-colors text-sm shadow-sm cursor-pointer"
+                      onClick={() => handleAddToCart(info)}
                     >
-                      <h1>Add to Cart</h1>
+                      Add to Cart
                     </button>
                   )}
                 </div>
@@ -194,9 +176,9 @@ function RestaurantMenuItemCard({ card, restaurantDetails }) {
     return (
       <div className="border-b-8 border-slate-200 mt-10">
         <div className="px-4 py-4">
-          <h2 className="text-xl  text-gray-800 mb-2">{card?.title}</h2>
+          <h2 className="text-xl text-gray-800 mb-2">{card?.title}</h2>
           <div>
-            {card?.categories?.map((item , index) => (
+            {card?.categories?.map((item, index) => (
               <RestaurantMenuItemCard key={item?.id || index} card={item} />
             ))}
           </div>
