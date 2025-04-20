@@ -77,14 +77,22 @@ function Navbar() {
   };
 
   const fetchLocation = async () => {
-    const response = await fetch(`${LOCATION_API}${locationSearchText}`);
-    const data = await response.json();
-    setLocationSearchResult(data?.data);
+    try {
+      const response = await fetch(`${LOCATION_API}${locationSearchText}`);
+      if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+      const data = await response.json();
+      console.log(data);
+      
+      setLocationSearchResult(data?.data);
+    } catch (err) {
+      console.error("fetchLocation error:", err);
+      setError("Failed to fetch location results.");
+    }
   };
 
   const fetchlatandlang = async (item) => {
     const res = await fetch(LATandLONG_API + item?.place_id);
-    const data = await res.json();
+    const data = await res.json();  
 
     dispatch(
       setCoordinates({

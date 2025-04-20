@@ -49,7 +49,7 @@ function AllRestaurantSection({ data, title }) {
         {title?.title}
       </h1>
       <div className="hidden lg:flex gap-3 mt-7">
-        {filterOptions.map((filter) => (
+        {data?.length > 0 && filterOptions.map((filter) => (
           <button
             key={filter.filterName}
             className={`filterButton ${

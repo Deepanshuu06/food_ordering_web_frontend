@@ -40,15 +40,17 @@ function TopRestaurantSection({ data }) {
     }
   }
 
+  
+
   return (
     <div className="mt-10 px-4">
       {topRestaurantList.length > 0 && (
         <div className="flex justify-between items-center py-5">
           <h1 className="lg:text-2xl font-bold">{topRestaurantSectionTitle}</h1>
-          <div className="flex gap-6 items-center">
+           <div className="flex gap-6 items-center">
             <i
               onClick={handlePrev}
-              className={`fi text-2xl lg:text-2xl md:text-2xl fi-br-angle-circle-left cursor-pointer${
+              className={`fi text-2xl lg:text-2xl md:text-2xl fi-br-angle-circle-left cursor-pointer ${
                 translateValue === 0 ? "text-gray-400" : "text-black"
               }`}
               style={{ pointerEvents: translateValue === 0 ? "none" : "auto" }}

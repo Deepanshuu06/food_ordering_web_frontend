@@ -26,7 +26,7 @@ function HeroSection({ data }) {
         <h1 className="text-lg lg:text-2xl md:text-xl px-3 lg:px-0 font-bold">
           {HeroSectionTitle}
         </h1>
-        <div className="justify-between lg:flex gap-6 items-center hidden">
+  <div className="justify-between lg:flex gap-6 items-center hidden">
           <i
             onClick={handlePrev}
             className={`fi text-2xl lg:text-2xl md:text-2xl fi-br-angle-circle-left cursor-pointer ${
