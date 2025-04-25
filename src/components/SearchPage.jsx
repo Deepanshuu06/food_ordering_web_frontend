@@ -7,6 +7,7 @@ import {
 import SearchDishSection from "./Sections/SearchDishSection";
 import SearchRestaurantSection from "./Sections/SearchRestaurantSection";
 import { changeSearchText } from "./utils/slices/searchTextSlice";
+import RestaurantsMenuShimmer from "./Shimmers/RestaurantsMenuShimmer";
 
 function SearchPage() {
   const { lat, lng } = useSelector((state) => state.location);
@@ -22,6 +23,7 @@ function SearchPage() {
   const [isRestaurantSectionOpen, setIsRestaurantSectionOpen] = useState(false);
   const [RestaurantData, setRestaurantData] = useState([]);
   const [DishData, setDishData] = useState([]);
+  const [isLoading, setIsLoading] = useState();
 
   const dispatch = useDispatch();
 
@@ -73,6 +75,7 @@ function SearchPage() {
   }, [searchText, lat, lng]);
 
   async function handleSearchClick(item) {
+    setIsLoading(true);
     setIsSearchResultDetailsSectionOpen(true);
     try {
       const metadata = JSON.parse(item.metadata);
@@ -98,6 +101,7 @@ function SearchPage() {
 
       setIsRestaurantSectionOpen(item?.type === "RESTAURANT");
       setIsDishSectionOpen(item?.type !== "RESTAURANT");
+      setIsLoading(false);
     } catch (error) {
       console.error("Error handling search click:", error);
     }
@@ -181,6 +185,7 @@ function SearchPage() {
               onClick={() => {
                 setIsRestaurantSectionOpen(true);
                 setIsDishSectionOpen(false);
+                setIsLoading(false);
               }}
             >
               Restaurant
@@ -192,6 +197,7 @@ function SearchPage() {
               onClick={() => {
                 setIsDishSectionOpen(true);
                 setIsRestaurantSectionOpen(false);
+                setIsLoading(false);
               }}
             >
               Dish
@@ -203,12 +209,15 @@ function SearchPage() {
         {DishData.length == 0 &&
         RestaurantData.length == 0 &&
         isRestaurantSectionOpen ? (
-          <h1>simmer</h1>
+          <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim accusantium quia omnis, in quis possimus minus iusto quo fugit illo magni adipisci molestiae soluta maxime molestias ducimus! Cumque, laboriosam aperiam id dicta reprehenderit vitae deserunt nemo error, exercitationem corporis officiis sed, enim culpa odio amet nam ipsum? Itaque, voluptates labore veniam ipsa modi blanditiis laborum nulla sequi eum asperiores suscipit quas in sit dolorem eligendi quaerat atque. Debitis nulla perspiciatis quia aut voluptatum obcaecati ut beatae a cupiditate eveniet corporis, iste consectetur provident officia perferendis minima esse ducimus sed consequuntur nam molestiae! Eius adipisci assumenda dolore cum excepturi totam placeat?</h1>
         ) : (
           <></>
         )}
 
-        {isDishSectionOpen && <SearchDishSection data={DishData} />}
+        {isLoading && <RestaurantsMenuShimmer />}
+
+
+        {isDishSectionOpen &&  <SearchDishSection data={DishData} />}
         {isRestaurantSectionOpen && (
           <SearchRestaurantSection data={RestaurantData} />
         )}

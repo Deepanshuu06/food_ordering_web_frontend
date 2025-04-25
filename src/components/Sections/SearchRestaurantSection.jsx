@@ -14,19 +14,21 @@ function SearchRestaurantSection({ data }) {
   const resCtaLink = data[0]?.card?.card?.ctaWithParams || {};
   const isMobile = window.innerWidth <= 768;
 
-
-  
-
   const fetchRestaurantdata = async () => {
 
-    const apiURL = isMobile ? `${import.meta.env.VITE_BASEURL_DESKTOP}/restaurants/search/v3?lat=${lat}&lng=${lng}&str=${searchText.replace(
-      " ",
-      "+"
-    )}&trackingId=undefined&submitAction=ENTER&queryUniqueId=9444189e-a5f4-1ef3-fc6f-0f174a906659&selectedPLTab=RESTAURANT` 
-    : `${import.meta.env.VITE_BASEURL_DESKTOP}/restaurants/search/v3?lat=${lat}&lng=${lng}&str=${searchText.replace(
-      " ",
-      "+"
-    )}&trackingId=undefined&submitAction=ENTER&queryUniqueId=9444189e-a5f4-1ef3-fc6f-0f174a906659&selectedPLTab=RESTAURANT`
+    const apiURL = isMobile
+      ? `${
+          import.meta.env.VITE_BASEURL_DESKTOP
+        }/restaurants/search/v3?lat=${lat}&lng=${lng}&str=${searchText.replace(
+          " ",
+          "+"
+        )}&trackingId=undefined&submitAction=ENTER&queryUniqueId=9444189e-a5f4-1ef3-fc6f-0f174a906659&selectedPLTab=RESTAURANT`
+      : `${
+          import.meta.env.VITE_BASEURL_DESKTOP
+        }/restaurants/search/v3?lat=${lat}&lng=${lng}&str=${searchText.replace(
+          " ",
+          "+"
+        )}&trackingId=undefined&submitAction=ENTER&queryUniqueId=9444189e-a5f4-1ef3-fc6f-0f174a906659&selectedPLTab=RESTAURANT`;
 
     const response = await fetch(apiURL);
 
@@ -35,15 +37,18 @@ function SearchRestaurantSection({ data }) {
       data?.data?.cards[0]?.groupedCard?.cardGroupMap?.RESTAURANT?.cards
     );
     setIsLoading(false);
+
   };
 
   useEffect(() => {
     if (data.length === 0) {
       fetchRestaurantdata();
-    } else {
+    } else
       setIsLoading(false);
-    }
-  }, [data, searchText, lat, lng]); 
+        
+  }, [data, searchText, lat, lng]);
+
+  
 
   return isLoading ? (
     <RestaurantsMenuShimmer />
@@ -52,34 +57,33 @@ function SearchRestaurantSection({ data }) {
       <div>
         {data.length > 0 ? (
           <Link to={`/restaurantmenu/${resCtaLink?.params?.restaurant_id}`}>
-          <div className="grid grid-cols-1 lg:grid-cols-2">
-            <div className="bg-white lg:p-3 p-0 flex items-center space-x-4">
-            
-              <div className="relative w-[100px] h-[100px] rounded-lg overflow-hidden">
-                <img
-                  src={
-                    info?.cloudinaryImageId
-                      ? `${MENU_ITEM_CONST_IMAGE_URL}${info?.cloudinaryImageId}`
-                      : "default-image-url.jpg"
-                  }
-                  alt={info?.name || "Restaurant"}
-                  className="w-full h-full object-cover"
-                />
-                <button className="absolute bottom-2 right-2 bg-black text-white px-2 py-1 rounded">
-                  Items
-                </button>
-              </div>
-              <div>
-                <h1 className="text-lg font-semibold">{info?.name}</h1>
-                <h3 className="text-gray-500 text-xs">
-                  Rating: {info?.avgRatingString}
-                </h3>
-                <h3 className="text-gray-700 text-xs">
-                  {info?.costForTwoMessage}
-                </h3>
+            <div className="grid grid-cols-1 lg:grid-cols-2">
+              <div className="bg-white lg:p-3 p-0 flex items-center space-x-4">
+                <div className="relative w-[100px] h-[100px] rounded-lg overflow-hidden">
+                  <img
+                    src={
+                      info?.cloudinaryImageId
+                        ? `${MENU_ITEM_CONST_IMAGE_URL}${info?.cloudinaryImageId}`
+                        : "default-image-url.jpg"
+                    }
+                    alt={info?.name || "Restaurant"}
+                    className="w-full h-full object-cover"
+                  />
+                  <button className="absolute bottom-2 right-2 bg-black text-white px-2 py-1 rounded">
+                    Items
+                  </button>
+                </div>
+                <div>
+                  <h1 className="text-lg font-semibold">{info?.name}</h1>
+                  <h3 className="text-gray-500 text-xs">
+                    Rating: {info?.avgRatingString}
+                  </h3>
+                  <h3 className="text-gray-700 text-xs">
+                    {info?.costForTwoMessage}
+                  </h3>
+                </div>
               </div>
             </div>
-          </div>
           </Link>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -91,9 +95,7 @@ function SearchRestaurantSection({ data }) {
               }) => (
                 <div
                   className="bg-white p-3 flex items-center space-x-4"
-                  key={info.id}
-                >
-                  
+                  key={info.id}>
                   <div className="relative w-[100px] h-[100px] rounded-lg overflow-hidden">
                     <img
                       src={
@@ -140,8 +142,7 @@ function SearchRestaurantSection({ data }) {
                 <Link key={index}>
                   <div
                     className="bg-white lg:p-3 p-0 flex items-center space-x-4"
-                    key={restaurant?.info?.id}
-                  >
+                    key={restaurant?.info?.id}>
                     <div className="relative w-[100px] h-[100px] rounded-lg overflow-hidden">
                       <img
                         src={

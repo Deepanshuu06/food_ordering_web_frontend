@@ -1,8 +1,5 @@
 // src/constants.js
 
-
-
-
 export const NAVBAR_LOGO_PNG = 'https://img.freepik.com/premium-vector/food-zone-logo-restaurant_851538-48.jpg';
 export const RESTAURANTS_API = `${import.meta.env.VITE_BASEURL}/restaurants/list/v5?lat=22.7496812&lng=75.8913294&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING`;
 export const RESTAURANTS_MENU_API = `${import.meta.env.VITE_BASEURL_DESKTOP}/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=22.7496812&lng=75.8913294&restaurantId=`
